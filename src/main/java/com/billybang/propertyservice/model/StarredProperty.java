@@ -1,0 +1,16 @@
+package com.billybang.propertyservice.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class StarredProperty {
+    @Id
+    private Long starredPropertyId;
+    private Long userId;
+    private Long propertyId;
+}
