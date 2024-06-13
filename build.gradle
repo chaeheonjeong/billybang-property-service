@@ -21,18 +21,43 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2023.0.2")
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // actuator
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client' // eureka client
+    implementation 'org.springframework.cloud:spring-cloud-starter-config' // config client
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp' // bus amqp
+
     implementation 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'jakarta.validation:jakarta.validation-api'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4' // swagger
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    implementation 'jakarta.validation:jakarta.validation-api'
+
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final' // mapstruct
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jar {
+    enabled = false;
 }
