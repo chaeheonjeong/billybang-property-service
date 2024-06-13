@@ -1,0 +1,22 @@
+server:
+  port: 3001
+spring:
+  application:
+    name: property-service
+  profiles:
+    active: local
+    include:
+      - datasource
+      - cloud
+      - logging
+  config:
+    import: [optional:configserver:http://3.39.52.110:8888]
+  cloud:
+    config:
+      name: property-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
