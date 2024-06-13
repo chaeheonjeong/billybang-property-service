@@ -51,7 +51,7 @@ public class PropertyDataSaverService {
                 for(Object obj: jsonArray){
                     JSONObject json = (JSONObject) obj;
                     Property property = new Property();
-                    property.setPropertyId(Long.parseLong(json.get("articleNo").toString()));
+                    property.setId(Long.parseLong(json.get("articleNo").toString()));
                     property.setArticleName(json.get("articleName").toString());
                     property.setBuildingName(json.get("buildingName").toString());
                     property.setRealEstateType(json.get("realEstateTypeCode").toString());
@@ -72,8 +72,8 @@ public class PropertyDataSaverService {
                     if(json.get("dealOrWarrantPrc") == null) continue;
                     property.setPrice(toIntPrice(json.get("dealOrWarrantPrc").toString()));
 
-                    property.setLatitude(Float.parseFloat(json.get("latitude").toString()));
-                    property.setLongitude(Float.parseFloat(json.get("longitude").toString()));
+                    property.setLatitude(Double.parseDouble(json.get("latitude").toString()));
+                    property.setLongitude(Double.parseDouble(json.get("longitude").toString()));
                     property.setArticleUrl(json.get("cpPcArticleUrl").toString());
                     property.setRepresentativeImgUrl(getStringValue(json, "representativeImgUrl"));
                     property.setSameAddrCnt(Integer.parseInt(json.get("sameAddrCnt").toString()));

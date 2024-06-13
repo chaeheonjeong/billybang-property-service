@@ -11,12 +11,11 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@ToString
 @Table(name = "properties")
 public class Property {
     @Id
-    @Column(unique = true, nullable = false)
-    private Long propertyId;
+    @Column(name = "property_id", unique = true, nullable = false)
+    private Long id;
     @Column(length = 30, nullable = false)
     private String articleName;
     @Column(length = 10, nullable = true)
@@ -44,9 +43,9 @@ public class Property {
     @Column(length = 50, nullable = true)
     private String roadAddress;
     @Column(nullable = false)
-    private float latitude;
+    private double latitude;
     @Column(nullable = false)
-    private float longitude;
+    private double longitude;
     @Column(length = 200, nullable = false)
     private String articleUrl;
     @Column(length = 500, nullable = true)
