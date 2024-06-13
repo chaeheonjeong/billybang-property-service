@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.dto.response;
+package com.billybang.propertyservice.model.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
