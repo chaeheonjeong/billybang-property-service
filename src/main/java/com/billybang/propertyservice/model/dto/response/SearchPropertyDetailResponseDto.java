@@ -1,15 +1,17 @@
 package com.billybang.propertyservice.model.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PropertyDto {
+@AllArgsConstructor
+public class SearchPropertyDetailResponseDto {
     private Long propertyId;
     private String articleName;
     private String buildingName;
-    private String realEstate;
+    private String realEstateType;
     private String tradeType;
     private String articleFeatureDesc;
     private String articleConfirmYmd;
@@ -20,8 +22,8 @@ public class PropertyDto {
     private int price;
     private String jibeonAddress;
     private String roadAddress;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
     private String articleUrl;
     private String representativeImgUrl;
     private int sameAddrCnt;
