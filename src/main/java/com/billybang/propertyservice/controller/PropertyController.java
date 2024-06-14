@@ -1,30 +1,33 @@
 package com.billybang.propertyservice.controller;
 
+import com.billybang.propertyservice.api.PropertyApi;
+import com.billybang.propertyservice.model.Property;
 import com.billybang.propertyservice.model.dto.request.SearchPropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.SearchPropertyRequestDto;
-import com.billybang.propertyservice.dto.response.SearchPropertyResponseDto;
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
 import com.billybang.propertyservice.service.PropertyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class PropertyController {
+public class PropertyController implements PropertyApi {
+
     private PropertyService propertyService;
 
     @GetMapping("/properties")
-    public ResponseEntity<List<SearchPropertyResponseDto>> findProperty(@ModelAttribute SearchPropertyRequestDto searchPropertyRequestDto){
-        List<SearchPropertyResponseDto> properties = propertyService.findPropertyList(searchPropertyRequestDto);
+    public ResponseEntity<List<SearchPropertyResponseDto>> findProperties(SearchPropertyRequestDto requestDto){
+        List<SearchPropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
         return ResponseEntity.ok(properties);
     }
 
     @GetMapping("/properties/details")
-    public ResponseEntity<List<Property>> findPropertyDetail(@ModelAttribute SearchPropertyDetailRequestDto searchPropertyDetailRequestDto){
-        List<Property> properties = propertyService.findPropertyDetailList(searchPropertyDetailRequestDto);
+    public ResponseEntity<List<Property>> findPropertyDetail(SearchPropertyDetailRequestDto requestDto){
+        List<Property> properties = propertyService.findPropertyDetailList(requestDto);
         return ResponseEntity.ok(properties);
     }
 }
