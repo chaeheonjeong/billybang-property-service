@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.controller;
 
-import com.billybang.propertyservice.dto.request.StarredPropertyReqeustDto;
+import com.billybang.propertyservice.model.dto.request.StarredPropertyReqeustDto;
 import com.billybang.propertyservice.model.Property;
 import com.billybang.propertyservice.service.StarredPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;

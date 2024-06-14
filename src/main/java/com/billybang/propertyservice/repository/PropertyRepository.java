@@ -1,7 +1,7 @@
 package com.billybang.propertyservice.repository;
 
-import com.billybang.propertyservice.dto.response.SearchPropertyResponseDto;
 import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
-    @Query("SELECT new com.billybang.propertyservice.dto.response.SearchPropertyResponseDto(" +
+    @Query("SELECT new com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto(" +
             "COUNT(p), " +
             "MIN(p.price), " +
             "p.area1, p.latitude, p.longitude) " +

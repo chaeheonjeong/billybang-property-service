@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.dto.request.StarredPropertyReqeustDto;
+import com.billybang.propertyservice.model.dto.request.StarredPropertyReqeustDto;
 import com.billybang.propertyservice.model.Property;
 import com.billybang.propertyservice.model.StarredProperty;
 import com.billybang.propertyservice.repository.PropertyRepository;

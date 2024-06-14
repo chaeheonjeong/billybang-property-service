@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.dto.request;
+package com.billybang.propertyservice.model.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

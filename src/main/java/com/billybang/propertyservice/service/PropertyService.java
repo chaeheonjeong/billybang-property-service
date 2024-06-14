@@ -1,9 +1,9 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.dto.request.SearchPropertyDetailRequestDto;
-import com.billybang.propertyservice.dto.request.SearchPropertyRequestDto;
-import com.billybang.propertyservice.dto.response.SearchPropertyResponseDto;
+import com.billybang.propertyservice.model.dto.request.SearchPropertyDetailRequestDto;
+import com.billybang.propertyservice.model.dto.request.SearchPropertyRequestDto;
 import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
 import com.billybang.propertyservice.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
