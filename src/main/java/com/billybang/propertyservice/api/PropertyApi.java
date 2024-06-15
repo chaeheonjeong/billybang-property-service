@@ -26,7 +26,7 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping
-    ResponseEntity<ApiUtils.ApiResult<List<SearchPropertyResponseDto>>> findProperties(@ModelAttribute SearchPropertyRequestDto requestDto);
+    ResponseEntity<ApiResult<List<SearchPropertyResponseDto>>> findProperties(@ModelAttribute SearchPropertyRequestDto requestDto);
 
     @Operation(summary = "매물 상세 조회", description = "매물의 상세 정보를 조회합니다.")
     @ApiResponses(value = {
@@ -35,5 +35,5 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/details")
-    ResponseEntity<ApiUtils.ApiResult<List<Property>>> findPropertyDetail(@ModelAttribute SearchPropertyDetailRequestDto requestDto);
+    ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(@ModelAttribute SearchPropertyDetailRequestDto requestDto);
 }
