@@ -1,5 +1,6 @@
 package com.billybang.propertyservice.exception;
 
+import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.exception.common.CommonException;
 import jakarta.validation.ConstraintViolation;
@@ -28,7 +29,7 @@ public class ExceptionAdvice {
 	 * 주로 @RequestBody, @RequestPart 어노테이션에서 발생
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.error("handleMethodArgumentNotValidException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return ResponseEntity.badRequest().body(ApiUtils.error(response));
@@ -39,7 +40,7 @@ public class ExceptionAdvice {
 	 * ref https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args
 	 */
 	@ExceptionHandler(BindException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleBindException(BindException e) {
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleBindException(BindException e) {
 		log.error("handleBindException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
 		return ResponseEntity.badRequest().body(ApiUtils.error(response));
@@ -49,7 +50,7 @@ public class ExceptionAdvice {
 	 * @PathVariable 에서 validation을 할 때 binding error가 발생하는 경우
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleConstraintViolationException(ConstraintViolationException e) {
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleConstraintViolationException(ConstraintViolationException e) {
 		log.error("handleConstraintViolationException {}", e.getMessage());
 		Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, constraintViolations);
@@ -61,7 +62,7 @@ public class ExceptionAdvice {
 	 * @PathVariable에서 string -> int/long 등의 숫자 타입 binding 못할 경우
 	 */
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleMethodArgumentTypeMismatchException(
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleMethodArgumentTypeMismatchException(
 			MethodArgumentTypeMismatchException e) {
 		log.error("handleMethodArgumentTypeMismatchException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(e);
@@ -73,7 +74,7 @@ public class ExceptionAdvice {
 	 * 또한, 숫자가 int 혹은 long type 등의 범위를 벗어나는 경우 발생
 	 */
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleHttpMessageNotReadableExceptionException(
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleHttpMessageNotReadableExceptionException(
 		HttpMessageNotReadableException e) {
 		log.error("handleHttpMessageNotReadableExceptionException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(e);
@@ -84,7 +85,7 @@ public class ExceptionAdvice {
 	 * 지원하지 않은 HTTP method 호출 할 경우 발생
 	 */
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleHttpRequestMethodNotSupportedException(
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException e) {
 		log.error("handleHttpRequestMethodNotSupportedException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
@@ -95,21 +96,21 @@ public class ExceptionAdvice {
 	 * 필요한 권한을 보유하지 않은 경우 발생
 	 */
 	@ExceptionHandler(AccessDeniedException.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleAccessDeniedException(AccessDeniedException e) {
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleAccessDeniedException(AccessDeniedException e) {
 		log.error("handleAccessDeniedException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.ACCESS_DENIED);
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiUtils.error(response));
 	}
 
 	@ExceptionHandler(CommonException.class)
-	public ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleCommonException(final CommonException e) {
+	public ResponseEntity<ApiResult<ErrorResponse>> handleCommonException(final CommonException e) {
 		log.error("CommonException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(e);
 		return ResponseEntity.status(response.getStatus()).body(ApiUtils.error(response));
 	}
 
 	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<ApiUtils.ApiResult<ErrorResponse>> handleUnExpectException(Exception e) {
+	protected ResponseEntity<ApiResult<ErrorResponse>> handleUnExpectException(Exception e) {
 		log.error("UnExpectException {}", e.getMessage());
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
 		return ResponseEntity.internalServerError().body(ApiUtils.error(response));
