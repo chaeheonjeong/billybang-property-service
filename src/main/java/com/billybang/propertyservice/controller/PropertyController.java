@@ -1,5 +1,6 @@
 package com.billybang.propertyservice.controller;
 
+import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.api.PropertyApi;
 import com.billybang.propertyservice.model.Property;
@@ -21,13 +22,13 @@ public class PropertyController implements PropertyApi {
     private PropertyService propertyService;
 
     @GetMapping("/properties")
-    public ResponseEntity<ApiUtils.ApiResult<List<SearchPropertyResponseDto>>> findProperties(SearchPropertyRequestDto requestDto){
+    public ResponseEntity<ApiResult<List<SearchPropertyResponseDto>>> findProperties(SearchPropertyRequestDto requestDto){
         List<SearchPropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
     @GetMapping("/properties/details")
-    public ResponseEntity<ApiUtils.ApiResult<List<Property>>> findPropertyDetail(SearchPropertyDetailRequestDto requestDto){
+    public ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(SearchPropertyDetailRequestDto requestDto){
         List<Property> properties = propertyService.findPropertyDetailList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
