@@ -1,17 +1,34 @@
 package com.billybang.propertyservice.controller;
 
+import com.billybang.propertyservice.api.ApiUtils;
+import com.billybang.propertyservice.api.PropertyApi;
+import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.dto.request.SearchPropertyDetailRequestDto;
+import com.billybang.propertyservice.model.dto.request.SearchPropertyRequestDto;
+import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
 import com.billybang.propertyservice.service.PropertyService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
-public class PropertyController {
+public class PropertyController implements PropertyApi {
+
     private PropertyService propertyService;
 
-//    @GetMapping("/properties")
-//    public ApiUtils.ApiResult findProperty(){
-//
-//    }
+    @GetMapping("/properties")
+    public ResponseEntity<ApiUtils.ApiResult<List<SearchPropertyResponseDto>>> findProperties(SearchPropertyRequestDto requestDto){
+        List<SearchPropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
+        return ResponseEntity.ok(ApiUtils.success(properties));
+    }
+
+    @GetMapping("/properties/details")
+    public ResponseEntity<ApiUtils.ApiResult<List<Property>>> findPropertyDetail(SearchPropertyDetailRequestDto requestDto){
+        List<Property> properties = propertyService.findPropertyDetailList(requestDto);
+        return ResponseEntity.ok(ApiUtils.success(properties));
+    }
 }
