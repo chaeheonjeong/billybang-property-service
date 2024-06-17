@@ -1,9 +1,11 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.SearchPropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.SearchPropertyRequestDto;
 import com.billybang.propertyservice.model.Property;
 import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
+import com.billybang.propertyservice.model.dto.response.UserResponseDto;
 import com.billybang.propertyservice.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 @Transactional
 public class PropertyService {
     private PropertyRepository propertyRepository;
+    private UserServiceClient userServiceClient;
 
     public List<SearchPropertyResponseDto> findPropertyList(SearchPropertyRequestDto searchPropertyRequestDto){
         String[] realEstateTypes = splitTypes(searchPropertyRequestDto.getRealEstateType());
