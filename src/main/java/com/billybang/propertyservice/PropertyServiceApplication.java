@@ -1,11 +1,18 @@
 package com.billybang.propertyservice;
 
+import com.billybang.propertyservice.service.AreaStatisticDataSaverService;
+import com.billybang.propertyservice.service.DistrictStatisticDataSaverService;
 import com.billybang.propertyservice.service.PropertyDataSaverService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -23,6 +30,26 @@ public class PropertyServiceApplication {
 //
 //            for(String folderPath: folderPathList) {
 //                propertyDataSaverService.readJsonFiles(folderPath);
+//            }
+//        };
+//    }
+
+//    @Bean
+//    public CommandLineRunner importStatistics(DistrictStatisticDataSaverService districtStatisticDataSaverService, AreaStatisticDataSaverService areaStatisticDataSaverService) {
+//        return args -> {
+//            String districtCsvFilePath = "data/구별_통계.csv";
+//            String AreaCsvFilePath = "data/동별_통계.csv";
+//
+//            Resource disResource = new ClassPathResource(districtCsvFilePath);
+//            Resource areaResource = new ClassPathResource(AreaCsvFilePath);
+//            try (InputStream disInputStream = disResource.getInputStream();
+//                 InputStream areaInputStream = areaResource.getInputStream()) {
+//
+//                districtStatisticDataSaverService.saveDistrictStatisticsFromCSV(disInputStream);
+//                areaStatisticDataSaverService.saveAreaStatisticsFromCSV(areaInputStream);
+//                System.out.println("CSV data imported successfully!");
+//            } catch (IOException e) {
+//                System.out.println("Failed to import CSV data: " + e.getMessage());
 //            }
 //        };
 //    }

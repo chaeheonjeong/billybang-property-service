@@ -1,7 +1,7 @@
 package com.billybang.propertyservice.service;
 
 import com.billybang.propertyservice.model.Property;
-import com.billybang.propertyservice.repository.PropertyDataSaveRepository;
+import com.billybang.propertyservice.repository.PropertyDataSaverRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.json.simple.parser.JSONParser;
@@ -20,13 +20,13 @@ import java.util.List;
 @Transactional
 @AllArgsConstructor
 public class PropertyDataSaverService {
-    private final PropertyDataSaveRepository propertyDataSaveRepository;
+    private final PropertyDataSaverRepository propertyDataSaverRepository;
 
     public void saveProperties(List<Property> properties) {
         System.out.println(properties.get(0));
         for (Property property : properties) {
             try {
-                propertyDataSaveRepository.save(property);
+                propertyDataSaverRepository.save(property);
             } catch (DataIntegrityViolationException e) {
                 continue;
             }

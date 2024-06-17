@@ -1,5 +1,7 @@
 package com.billybang.propertyservice.controller;
 
+import com.billybang.propertyservice.api.ApiResult;
+import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.model.dto.request.StarredPropertyReqeustDto;
 import com.billybang.propertyservice.model.Property;
 import com.billybang.propertyservice.service.StarredPropertyService;
@@ -20,15 +22,15 @@ public class StarredPropertyController {
     private Long userId = 888L;
 
     @PostMapping("/properties/stars")
-    public ResponseEntity<?> addStarredProperty(@RequestBody StarredPropertyReqeustDto starredPropertyReqeustDto){
+    public ResponseEntity<ApiResult<?>> addStarredProperty(@RequestBody StarredPropertyReqeustDto starredPropertyReqeustDto){
         starredPropertyService.addStarredProperty(starredPropertyReqeustDto, userId);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(ApiUtils.success(null));
     }
 
     @GetMapping("/properties/stars")
-    public ResponseEntity<List<Property>> searchStarredProperty(){
+    public ResponseEntity<ApiResult<List<Property>>> searchStarredProperty(){
         List<Property> starredPropertyList = starredPropertyService.searchStarredProperty(userId);
-        return ResponseEntity.ok(starredPropertyList);
+        return ResponseEntity.ok(ApiUtils.success(starredPropertyList));
     }
 
     @DeleteMapping("/properties/stars")

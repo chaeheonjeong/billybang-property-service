@@ -10,7 +10,6 @@ import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDt
 import com.billybang.propertyservice.service.PropertyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,13 +20,11 @@ public class PropertyController implements PropertyApi {
 
     private PropertyService propertyService;
 
-    @GetMapping("/properties")
     public ResponseEntity<ApiResult<List<SearchPropertyResponseDto>>> findProperties(SearchPropertyRequestDto requestDto){
         List<SearchPropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
-    @GetMapping("/properties/details")
     public ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(SearchPropertyDetailRequestDto requestDto){
         List<Property> properties = propertyService.findPropertyDetailList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));

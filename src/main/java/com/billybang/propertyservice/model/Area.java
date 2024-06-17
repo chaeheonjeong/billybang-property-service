@@ -10,7 +10,11 @@ import lombok.Setter;
 @Table(name = "areas")
 public class Area {
     @Id
-    @Column(name = "area_id", unique = true, nullable = false)
+    @Column(name = "area_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long districtId;
+    @Column(length = 30)
+    private String areaName;
+    private double populationDensity;
 }

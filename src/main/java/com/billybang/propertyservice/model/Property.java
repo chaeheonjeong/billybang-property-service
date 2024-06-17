@@ -14,46 +14,40 @@ import lombok.ToString;
 @Table(name = "properties")
 public class Property {
     @Id
-    @Column(name = "property_id", unique = true, nullable = false)
+    @Column(name = "property_id", unique = true)
     private Long id;
-    @Column(length = 30, nullable = false)
+    @Column(length = 30)
     private String articleName;
-    @Column(length = 10, nullable = true)
+    @Column(length = 10)
     private String buildingName;
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private String realEstateType;
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private String tradeType;
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String articleFeatureDesc;
-    @Column(length = 8, nullable = false)
+    @Column(length = 8)
     private String articleConfirmYmd;
-    @Column(length = 10, nullable = true)
+    @Column(length = 10)
     private String areaName;
-    @Column(nullable = false)
     private int area1;
-    @Column(nullable = false)
     private int area2;
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private String floorInfo;
-    @Column(nullable = false)
     private int price;
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String jibeonAddress;
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String roadAddress;
-    @Column(nullable = false)
     private double latitude;
-    @Column(nullable = false)
     private double longitude;
-    @Column(length = 200, nullable = false)
+    @Column(length = 200)
     private String articleUrl;
-    @Column(length = 500, nullable = true)
+    @Column(length = 500)
     private String representativeImgUrl;
-    @Column(nullable = false)
     private int sameAddrCnt;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String realtorName;
-    @Column(length = 30, nullable = false)
+    @Column(length = 30)
     private String cpName;
 }
