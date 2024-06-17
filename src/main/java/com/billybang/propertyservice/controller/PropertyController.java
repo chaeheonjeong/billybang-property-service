@@ -29,5 +29,4 @@ public class PropertyController implements PropertyApi {
         List<Property> properties = propertyService.findPropertyDetailList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
-
 }
