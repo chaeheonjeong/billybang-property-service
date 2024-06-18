@@ -1,8 +1,8 @@
 package com.billybang.propertyservice.service;
 
 import com.billybang.propertyservice.model.*;
-import com.billybang.propertyservice.model.dto.request.SearchStatisticRequestDto;
-import com.billybang.propertyservice.model.dto.response.SearchStatisticResponseDto;
+import com.billybang.propertyservice.model.dto.request.StatisticRequestDto;
+import com.billybang.propertyservice.model.dto.response.StatisticResponseDto;
 import com.billybang.propertyservice.repository.AreaRepository;
 import com.billybang.propertyservice.repository.DistrictRepository;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-public class InfoService {
+public class StatisticService {
 
     private static final Map<Long, Map<String, Double>> populationDensities = new HashMap<>();
     private static final Map<String, Float> individualIncomes = new HashMap<>();
@@ -28,15 +28,15 @@ public class InfoService {
     private final AreaRepository areaRepository;
     private final DistrictRepository districtRepository;
 
-    public SearchStatisticResponseDto findStatisticInfo(SearchStatisticRequestDto searchStatisticRequestDto) {
-        Long districtId = searchStatisticRequestDto.getDistrictId();
+    public StatisticResponseDto findStatisticInfo(StatisticRequestDto statisticRequestDto) {
+        Long districtId = statisticRequestDto.getDistrictId();
 
         if(populationDensities.isEmpty() || individualIncomes.isEmpty() || populationCounts.isEmpty() || crimeCounts.isEmpty()) {
             List<District> districts = districtRepository.findAll();
             initializeMaps(districts);
         }
 
-        return new SearchStatisticResponseDto(getPopulationDensity(districtId), getIndividualIncome(), getPopulationCount(districtId), getCrimeCount(), getAverage());
+        return new StatisticResponseDto(getPopulationDensity(districtId), getIndividualIncome(), getPopulationCount(districtId), getCrimeCount(), getAverage());
     }
 
     private void initializeMaps(List<District> districts){

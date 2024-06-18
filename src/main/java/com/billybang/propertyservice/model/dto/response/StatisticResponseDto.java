@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchStatisticResponseDto {
+public class StatisticResponseDto {
     private List<PopulationDensity> populationDensity;
     private List<IndividualIncome> individualIncome;
     private List<PopulationCount> populationCount;

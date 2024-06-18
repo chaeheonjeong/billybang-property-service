@@ -47,6 +47,8 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.5.5.Final' // mapstruct
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    implementation 'org.jsoup:jsoup:1.14.3' // jsoup
 }
 
 dependencyManagement {

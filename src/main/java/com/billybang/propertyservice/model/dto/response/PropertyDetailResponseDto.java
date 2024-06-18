@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchPropertyDetailResponseDto {
+public class PropertyDetailResponseDto {
     private Long propertyId;
     private String articleName;
     private String buildingName;
