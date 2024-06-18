@@ -1,8 +1,8 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.*;
 import com.billybang.propertyservice.model.dto.request.StatisticRequestDto;
 import com.billybang.propertyservice.model.dto.response.StatisticResponseDto;
+import com.billybang.propertyservice.model.statistic.*;
 import com.billybang.propertyservice.repository.AreaRepository;
 import com.billybang.propertyservice.repository.DistrictRepository;
 import lombok.AllArgsConstructor;

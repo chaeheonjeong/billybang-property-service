@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.model;
+package com.billybang.propertyservice.model.news;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

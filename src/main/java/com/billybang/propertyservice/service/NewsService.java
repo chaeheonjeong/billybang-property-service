@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.News;
+import com.billybang.propertyservice.model.news.News;
 import com.billybang.propertyservice.model.dto.request.NewsRequestDto;
 import com.billybang.propertyservice.repository.DistrictNewsRepository;
 import com.billybang.propertyservice.repository.NewsRepository;

@@ -2,7 +2,7 @@ package com.billybang.propertyservice.controller;
 
 import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
-import com.billybang.propertyservice.model.News;
+import com.billybang.propertyservice.model.news.News;
 import com.billybang.propertyservice.model.dto.request.NewsRequestDto;
 import com.billybang.propertyservice.service.NewsService;
 import lombok.AllArgsConstructor;

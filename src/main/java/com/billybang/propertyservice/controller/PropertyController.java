@@ -3,7 +3,7 @@ package com.billybang.propertyservice.controller;
 import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.api.PropertyApi;
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.property.Property;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;

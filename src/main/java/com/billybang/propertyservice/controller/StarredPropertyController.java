@@ -3,7 +3,7 @@ package com.billybang.propertyservice.controller;
 import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.model.dto.request.StarredPropertyReqeustDto;
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.property.Property;
 import com.billybang.propertyservice.service.StarredPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.billybang.propertyservice.repository;
 
 
-import com.billybang.propertyservice.model.DistrictNews;
+import com.billybang.propertyservice.model.news.DistrictNews;
 import feign.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

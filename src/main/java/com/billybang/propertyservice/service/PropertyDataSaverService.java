@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.property.Property;
 import com.billybang.propertyservice.repository.PropertyDataSaverRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
