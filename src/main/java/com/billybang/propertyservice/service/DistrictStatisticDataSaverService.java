@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.District;
+import com.billybang.propertyservice.model.statistic.District;
 import com.billybang.propertyservice.repository.DistrictRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

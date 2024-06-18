@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.api;
 
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.property.Property;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;

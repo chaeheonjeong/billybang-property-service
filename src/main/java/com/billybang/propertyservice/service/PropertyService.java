@@ -3,7 +3,7 @@ package com.billybang.propertyservice.service;
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
-import com.billybang.propertyservice.model.Property;
+import com.billybang.propertyservice.model.property.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.repository.PropertyRepository;
 import jakarta.transaction.Transactional;

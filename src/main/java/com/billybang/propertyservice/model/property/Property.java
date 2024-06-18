@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.model;
+package com.billybang.propertyservice.model.property;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

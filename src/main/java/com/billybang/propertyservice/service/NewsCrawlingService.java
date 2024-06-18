@@ -1,7 +1,7 @@
 package com.billybang.propertyservice.service;
-import com.billybang.propertyservice.model.CrawlingRegion;
-import com.billybang.propertyservice.model.DistrictNews;
-import com.billybang.propertyservice.model.News;
+import com.billybang.propertyservice.model.news.CrawlingRegion;
+import com.billybang.propertyservice.model.news.DistrictNews;
+import com.billybang.propertyservice.model.news.News;
 import com.billybang.propertyservice.repository.DistrictNewsRepository;
 import com.billybang.propertyservice.repository.NewsRepository;
 import jakarta.transaction.Transactional;

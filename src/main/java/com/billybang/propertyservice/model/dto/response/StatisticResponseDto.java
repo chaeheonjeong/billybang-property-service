@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.model.dto.response;
 
-import com.billybang.propertyservice.model.*;
+import com.billybang.propertyservice.model.statistic.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

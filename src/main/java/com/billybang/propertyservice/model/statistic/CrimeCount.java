@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.model;
+package com.billybang.propertyservice.model.statistic;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class IndividualIncome {
+public class CrimeCount {
     private String districtName;
-    private float income;
+    private int count;
 }
