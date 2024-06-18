@@ -1,9 +1,9 @@
 package com.billybang.propertyservice.api;
 
 import com.billybang.propertyservice.model.Property;
-import com.billybang.propertyservice.model.dto.request.SearchPropertyDetailRequestDto;
-import com.billybang.propertyservice.model.dto.request.SearchPropertyRequestDto;
-import com.billybang.propertyservice.model.dto.response.SearchPropertyResponseDto;
+import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
+import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
+import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +26,7 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping
-    ResponseEntity<ApiResult<List<SearchPropertyResponseDto>>> findProperties(@ModelAttribute SearchPropertyRequestDto requestDto);
+    ResponseEntity<ApiResult<List<PropertyResponseDto>>> findProperties(@ModelAttribute PropertyRequestDto requestDto);
 
     @Operation(summary = "매물 상세 조회", description = "매물의 상세 정보를 조회합니다.")
     @ApiResponses(value = {
@@ -35,5 +35,5 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/details")
-    ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(@ModelAttribute SearchPropertyDetailRequestDto requestDto);
+    ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto);
 }

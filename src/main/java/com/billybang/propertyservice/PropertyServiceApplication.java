@@ -2,6 +2,7 @@ package com.billybang.propertyservice;
 
 import com.billybang.propertyservice.service.AreaStatisticDataSaverService;
 import com.billybang.propertyservice.service.DistrictStatisticDataSaverService;
+import com.billybang.propertyservice.service.NewsCrawlingService;
 import com.billybang.propertyservice.service.PropertyDataSaverService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +20,20 @@ import java.io.InputStream;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableScheduling
 public class PropertyServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PropertyServiceApplication.class, args);
     }
+
+//    @Bean
+//    public CommandLineRunner test(NewsCrawlingService newsCrawlingService) {
+//        return (args) -> {
+//            newsCrawlingService.crawlNewsData();
+//            System.out.println("뉴스 크롤링 완료");
+//        };
+//    }
 
 //    @Bean
 //    public CommandLineRunner test(PropertyDataSaverService propertyDataSaverService) {

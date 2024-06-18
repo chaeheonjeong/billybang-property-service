@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchPropertyDetailRequestDto {
+public class PropertyDetailRequestDto {
     private String realEstateType;
     private String tradeType;
     private int priceMin;

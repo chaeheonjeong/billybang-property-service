@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchPropertyResponseDto {
+public class PropertyResponseDto {
     private Long cnt;
     private int price;
     private int area;

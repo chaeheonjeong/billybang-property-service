@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SearchStatisticRequestDto {
+public class NewsRequestDto {
     private Long districtId;
 }
