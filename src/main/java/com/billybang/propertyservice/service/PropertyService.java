@@ -2,54 +2,102 @@ package com.billybang.propertyservice.service;
 
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
+import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
-import com.billybang.propertyservice.model.property.Property;
+import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
+import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
+import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
+import com.billybang.propertyservice.model.entity.StarredProperty;
 import com.billybang.propertyservice.repository.PropertyRepository;
+import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Transactional
 public class PropertyService {
     private PropertyRepository propertyRepository;
+    private StarredPropertyRepository starredPropertyRepository;
     private UserServiceClient userServiceClient;
 
-    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto propertyRequestDto){
-        String[] realEstateTypes = splitTypes(propertyRequestDto.getRealEstateType());
-        String[] tradeTypes = splitTypes(propertyRequestDto.getTradeType());
+    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto){
+        String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
+        String[] tradeTypes = requestDto.getTradeType().split(":");
 
         return propertyRepository.findPropertyList(
                 realEstateTypes,
                 tradeTypes,
-                propertyRequestDto.getPriceMin(),
-                propertyRequestDto.getPriceMax(),
-                propertyRequestDto.getLeftLon(),
-                propertyRequestDto.getRightLon(),
-                propertyRequestDto.getTopLat(),
-                propertyRequestDto.getBottomLat()
+                requestDto.getPriceMin(),
+                requestDto.getPriceMax(),
+                requestDto.getLeftLon(),
+                requestDto.getRightLon(),
+                requestDto.getTopLat(),
+                requestDto.getBottomLat()
         );
     }
 
-    public List<Property> findPropertyDetailList(PropertyDetailRequestDto PropertyDetailRequestDto){
-        String[] realEstateTypes = splitTypes(PropertyDetailRequestDto.getRealEstateType());
-        String[] tradeTypes = splitTypes(PropertyDetailRequestDto.getTradeType());
+    public List<?> findPropertyDetailList(PropertyDetailRequestDto requestDto) {
+        String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
+        String[] tradeTypes = requestDto.getTradeType().split(":");
 
-        return propertyRepository.findPropertyDetailList(
+        System.out.println(userServiceClient.getUserInfo());
+
+        List<Property> properties = propertyRepository.findPropertyDetailList(
                 realEstateTypes,
                 tradeTypes,
-                PropertyDetailRequestDto.getPriceMin(),
-                PropertyDetailRequestDto.getPriceMax(),
-                PropertyDetailRequestDto.getLatitude(),
-                PropertyDetailRequestDto.getLongitude()
+                requestDto.getPriceMin(),
+                requestDto.getPriceMax(),
+                requestDto.getLatitude(),
+                requestDto.getLongitude()
         );
+
+//        if (userService.isLoggedIn()) {
+//            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
+//            List<Long> starredIds = starredProperties.stream()
+//                    .map(StarredProperty::getPropertyId)
+//                    .collect(Collectors.toList());
+//            return properties.stream()
+//                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
+//                    .collect(Collectors.toList());
+//        } else {
+        return properties;
+//        }
     }
 
-    private String[] splitTypes(String types) {
-        return types.split(":");
+    public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto){
+        Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
+        Property property = optProperty.get();
+        return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice());
+    }
+
+    private String[] makeNewTypes(String types) {
+        String[] typeList = types.split(":");
+        List<String> newList = new ArrayList<>();
+
+        for(String type: typeList){
+            if(type.equals("JT")){
+                newList.add("DDDGG");
+                newList.add("SGJT");
+                newList.add("HOJT");
+                newList.add("JWJT");
+            } else{
+                newList.add(type);
+            }
+        }
+
+        return newList.toArray(new String[0]);
+    }
+
+    private Long getUserId() {
+        return userServiceClient.getUserInfo().getResponse().getUserId();
     }
 }

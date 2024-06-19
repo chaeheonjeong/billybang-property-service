@@ -1,8 +1,10 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.model.*;
 import com.billybang.propertyservice.model.dto.request.StatisticRequestDto;
 import com.billybang.propertyservice.model.dto.response.StatisticResponseDto;
-import com.billybang.propertyservice.model.statistic.*;
+import com.billybang.propertyservice.model.entity.Area;
+import com.billybang.propertyservice.model.entity.District;
 import com.billybang.propertyservice.repository.AreaRepository;
 import com.billybang.propertyservice.repository.DistrictRepository;
 import lombok.AllArgsConstructor;
@@ -28,8 +30,8 @@ public class StatisticService {
     private final AreaRepository areaRepository;
     private final DistrictRepository districtRepository;
 
-    public StatisticResponseDto findStatisticInfo(StatisticRequestDto statisticRequestDto) {
-        Long districtId = statisticRequestDto.getDistrictId();
+    public StatisticResponseDto findStatisticInfo(StatisticRequestDto requestDto) {
+        Long districtId = requestDto.getDistrictId();
 
         if(populationDensities.isEmpty() || individualIncomes.isEmpty() || populationCounts.isEmpty() || crimeCounts.isEmpty()) {
             List<District> districts = districtRepository.findAll();

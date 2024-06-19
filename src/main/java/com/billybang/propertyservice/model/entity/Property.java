@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.model.property;
+package com.billybang.propertyservice.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,4 +50,8 @@ public class Property {
     private String realtorName;
     @Column(length = 30)
     private String cpName;
+    @Column(length = 100)
+    private String tags;
+    @Column(length = 30)
+    private String direction;
 }

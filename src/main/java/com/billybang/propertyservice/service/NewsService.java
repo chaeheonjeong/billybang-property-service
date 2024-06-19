@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.news.News;
+import com.billybang.propertyservice.model.entity.News;
 import com.billybang.propertyservice.model.dto.request.NewsRequestDto;
 import com.billybang.propertyservice.repository.DistrictNewsRepository;
 import com.billybang.propertyservice.repository.NewsRepository;
@@ -16,8 +16,8 @@ public class NewsService {
     NewsRepository newsRepository;
     DistrictNewsRepository districtNewsRepository;
 
-    public List<News> findNews(NewsRequestDto newsRequestDto){
-        Long districtId = newsRequestDto.getDistrictId();
+    public List<News> findNews(NewsRequestDto requestDto){
+        Long districtId = requestDto.getDistrictId();
         Pageable pageable = PageRequest.of(0, 10);
 
         List<Long> newsIds = districtNewsRepository.findLatestNewsIdsByDistrictId(districtId,pageable);
