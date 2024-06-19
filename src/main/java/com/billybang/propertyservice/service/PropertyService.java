@@ -13,6 +13,8 @@ import com.billybang.propertyservice.repository.PropertyRepository;
 import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,11 +47,11 @@ public class PropertyService {
         );
     }
 
-    public List<?> findPropertyDetailList(PropertyDetailRequestDto requestDto) {
+    public List<?> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
-        System.out.println(userServiceClient.getUserInfo());
+        Pageable pageable = PageRequest.of(page, size);
 
         List<Property> properties = propertyRepository.findPropertyDetailList(
                 realEstateTypes,
@@ -59,6 +61,11 @@ public class PropertyService {
                 requestDto.getLatitude(),
                 requestDto.getLongitude()
         );
+
+        for(Property property : properties){
+            System.out.println("**");
+            System.out.println(property);
+        }
 
 //        if (userService.isLoggedIn()) {
 //            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());

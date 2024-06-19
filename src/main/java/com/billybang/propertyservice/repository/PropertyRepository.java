@@ -1,8 +1,8 @@
 package com.billybang.propertyservice.repository;
 
-import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,6 +48,5 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             @Param("priceMin") int priceMin,
             @Param("priceMax") int priceMax,
             @Param("latitude") double latitude,
-            @Param("longitude") double longitude
-    );
+            @Param("longitude") double longitude);
 }

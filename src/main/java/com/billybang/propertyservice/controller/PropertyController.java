@@ -11,6 +11,7 @@ import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.service.PropertyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,8 +27,10 @@ public class PropertyController implements PropertyApi {
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
-    public ResponseEntity<ApiResult<List<?>>> findPropertyDetail(PropertyDetailRequestDto requestDto){
-        List<?> properties = propertyService.findPropertyDetailList(requestDto);
+    public ResponseEntity<ApiResult<List<?>>> findPropertyDetail(PropertyDetailRequestDto requestDto,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        List<?> properties = propertyService.findPropertyDetailList(requestDto, page, size);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
