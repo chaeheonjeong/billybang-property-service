@@ -76,7 +76,7 @@ public class PropertyService {
     public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto){
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
         Property property = optProperty.get();
-        return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice());
+        return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice(), property.getArticleName());
     }
 
     private String[] makeNewTypes(String types) {

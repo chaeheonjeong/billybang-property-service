@@ -11,4 +11,5 @@ public class PropertyAreaPriceResponseDto {
     String trade_type;
     int area2;
     int price;
+    String articleName;
 }
