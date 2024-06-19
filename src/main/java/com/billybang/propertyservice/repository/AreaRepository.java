@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.repository;
 
-import com.billybang.propertyservice.model.statistic.Area;
+import com.billybang.propertyservice.model.entity.Area;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

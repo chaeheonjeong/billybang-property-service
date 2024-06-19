@@ -3,7 +3,8 @@ package com.billybang.propertyservice.controller;
 import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.api.PropertyApi;
-import com.billybang.propertyservice.model.property.Property;
+import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
+import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
@@ -25,8 +26,13 @@ public class PropertyController implements PropertyApi {
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
-    public ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(PropertyDetailRequestDto requestDto){
-        List<Property> properties = propertyService.findPropertyDetailList(requestDto);
+    public ResponseEntity<ApiResult<List<?>>> findPropertyDetail(PropertyDetailRequestDto requestDto){
+        List<?> properties = propertyService.findPropertyDetailList(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
+    }
+
+    public ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(PropertyIdRequestDto requestDto){
+        PropertyAreaPriceResponseDto res = propertyService.findPropertyAreaPrice(requestDto);
+        return ResponseEntity.ok(ApiUtils.success(res));
     }
 }

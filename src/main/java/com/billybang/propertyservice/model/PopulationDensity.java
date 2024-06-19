@@ -1,4 +1,4 @@
-package com.billybang.propertyservice.model.statistic;
+package com.billybang.propertyservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

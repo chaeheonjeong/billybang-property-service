@@ -18,8 +18,8 @@ public class StatisticController {
     private StatisticService statisticService;
 
     @GetMapping("/districts/statistics")
-    public ResponseEntity<ApiResult<StatisticResponseDto>> findStatisticInfo(StatisticRequestDto statisticRequestDto){
-        StatisticResponseDto result = statisticService.findStatisticInfo(statisticRequestDto);
+    public ResponseEntity<ApiResult<StatisticResponseDto>> findStatisticInfo(StatisticRequestDto requestDto){
+        StatisticResponseDto result = statisticService.findStatisticInfo(requestDto);
         return ResponseEntity.ok(ApiUtils.success(result));
     }
 }

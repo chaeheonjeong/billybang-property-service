@@ -1,6 +1,6 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.model.property.Property;
+import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.repository.PropertyDataSaverRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -79,12 +79,30 @@ public class PropertyDataSaverService {
                     property.setSameAddrCnt(Integer.parseInt(json.get("sameAddrCnt").toString()));
                     property.setRealtorName(json.get("realtorName").toString());
                     property.setCpName(json.get("cpName").toString());
+                    property.setDirection(getStringValue(json, "direction"));
 
+                    Object tagListObj = json.get("tagList");
+                    JSONArray tagList;
+                    if (tagListObj instanceof JSONArray) {
+                        tagList = (JSONArray) tagListObj;
+                    } else {
+                        tagList = new JSONArray();
+                    }
+                    StringBuilder tagsBuilder = new StringBuilder();
+                    if (tagList != null) {
+                        for (int i = 0; i < tagList.size(); i++) {
+                            tagsBuilder.append(tagList.get(i));
+                            if (i < tagList.size() - 1) {
+                                tagsBuilder.append(",");
+                            }
+                        }
+                    }
+                    String tags = tagsBuilder.toString();
+                    property.setTags(tags);
                     properties.add(property);
                 }
             }
         }
-
         saveProperties(properties);
     }
 

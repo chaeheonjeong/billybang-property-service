@@ -1,6 +1,9 @@
 package com.billybang.propertyservice.api;
 
-import com.billybang.propertyservice.model.property.Property;
+import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
+import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
+import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
+import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
@@ -35,5 +38,14 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/details")
-    ResponseEntity<ApiResult<List<Property>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto);
+    ResponseEntity<ApiResult<List<?>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto);
+
+    @Operation(summary = "매물 거래 방식, 면적, 가격 조회", description = "매물의 거래 방식, 면적, 가격 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "405", description = "Method Not Allowed")
+    })
+    @GetMapping("/area-price")
+    ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(@ModelAttribute PropertyIdRequestDto requestDto);
 }
