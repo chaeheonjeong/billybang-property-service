@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -38,7 +39,9 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/details")
-    ResponseEntity<ApiResult<List<?>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto);
+    ResponseEntity<ApiResult<List<?>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto,
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size);
 
     @Operation(summary = "매물 거래 방식, 면적, 가격 조회", description = "매물의 거래 방식, 면적, 가격 정보를 조회합니다.")
     @ApiResponses(value = {
