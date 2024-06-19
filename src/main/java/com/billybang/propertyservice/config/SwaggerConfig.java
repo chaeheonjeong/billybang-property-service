@@ -24,4 +24,14 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi statisticsOpenApi() {
+        String[] paths = {"/districts/**"};
+
+        return GroupedOpenApi.builder()
+                .group("Statistics Service API")
+                .pathsToMatch(paths)
+                .build();
+    }
 }
