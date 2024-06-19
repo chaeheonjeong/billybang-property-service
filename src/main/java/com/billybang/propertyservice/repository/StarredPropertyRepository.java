@@ -1,7 +1,6 @@
 package com.billybang.propertyservice.repository;
 
-import com.billybang.propertyservice.model.Property;
-import com.billybang.propertyservice.model.StarredProperty;
+import com.billybang.propertyservice.model.entity.StarredProperty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StarredPropertyReqeustDto {
-    private Long propertyId;
+public class NewsRequestDto {
+    private Long districtId;
 }

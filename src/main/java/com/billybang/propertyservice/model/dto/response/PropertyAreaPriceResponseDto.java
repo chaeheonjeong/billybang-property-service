@@ -7,10 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchPropertyResponseDto {
-    private Long cnt;
-    private int price;
-    private int area;
-    private double latitude;
-    private double longitude;
+public class PropertyAreaPriceResponseDto {
+    String trade_type;
+    int area2;
+    int price;
+    String articleName;
 }
