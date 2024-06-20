@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,5 +25,5 @@ public interface StatisticApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/districts/statistics")
-    ResponseEntity<ApiResult<StatisticResponseDto>> findStatisticInfo(@ModelAttribute StatisticRequestDto requestDto);
+    ResponseEntity<ApiResult<StatisticResponseDto>> findStatisticInfo(@Valid @ModelAttribute StatisticRequestDto requestDto);
 }

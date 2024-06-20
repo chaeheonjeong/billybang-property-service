@@ -11,7 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +33,7 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping
-    ResponseEntity<ApiResult<List<PropertyResponseDto>>> findProperties(@ModelAttribute PropertyRequestDto requestDto);
+    ResponseEntity<ApiResult<List<PropertyResponseDto>>> findProperties(@Valid @ModelAttribute PropertyRequestDto requestDto);
 
     @Operation(summary = "매물 상세 조회", description = "매물의 상세 정보를 조회합니다.")
     @ApiResponses(value = {
@@ -39,9 +42,9 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/details")
-    ResponseEntity<ApiResult<List<?>>> findPropertyDetail(@ModelAttribute PropertyDetailRequestDto requestDto,
-                                                          @RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int size);
+    ResponseEntity<ApiResult<PageResult<PropertyDetailResponseDto>>> findPropertyDetail(@Valid @ModelAttribute PropertyDetailRequestDto requestDto,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size);
 
     @Operation(summary = "매물 거래 방식, 면적, 가격 조회", description = "매물의 거래 방식, 면적, 가격 정보를 조회합니다.")
     @ApiResponses(value = {
@@ -50,5 +53,5 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
     @GetMapping("/area-price")
-    ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(@ModelAttribute PropertyIdRequestDto requestDto);
+    ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(@Valid @ModelAttribute PropertyIdRequestDto requestDto);
 }
