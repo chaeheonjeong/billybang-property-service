@@ -16,6 +16,7 @@ import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.service.PropertyService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 public class PropertyController implements PropertyApi {
@@ -35,7 +37,9 @@ public class PropertyController implements PropertyApi {
     private PropertyService propertyService;
 
     public ResponseEntity<ApiResult<List<PropertyResponseDto>>> findProperties(PropertyRequestDto requestDto) {
+        log.info("request dto, real estate type: {}", requestDto.getRealEstateType());
         List<PropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
+        log.info("test after property service executed");
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
