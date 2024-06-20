@@ -1,37 +1,39 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
+import com.billybang.propertyservice.model.dto.response.ValidateTokenResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.StarredProperty;
+import com.billybang.propertyservice.model.mapper.PropertyMapper;
 import com.billybang.propertyservice.repository.PropertyRepository;
 import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@Transactional
 public class PropertyService {
     private PropertyRepository propertyRepository;
     private StarredPropertyRepository starredPropertyRepository;
     private UserServiceClient userServiceClient;
+    private PropertyMapper propertyMapper;
 
-    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto){
+    @Transactional
+    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
@@ -47,56 +49,55 @@ public class PropertyService {
         );
     }
 
-    public List<?> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
+    @Transactional
+    public Slice<PropertyDetailResponseDto> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
-
         Pageable pageable = PageRequest.of(page, size);
 
-        List<Property> properties = propertyRepository.findPropertyDetailList(
+        Slice<PropertyDetailResponseDto> properties = propertyRepository.findPropertyDetailList(
                 realEstateTypes,
                 tradeTypes,
                 requestDto.getPriceMin(),
                 requestDto.getPriceMax(),
                 requestDto.getLatitude(),
-                requestDto.getLongitude()
+                requestDto.getLongitude(),
+                pageable
         );
 
-        for(Property property : properties){
-            System.out.println("**");
-            System.out.println(property);
+        ApiResult<ValidateTokenResponseDto> validateTokenResult = userServiceClient.validateToken();
+        ValidateTokenResponseDto response = validateTokenResult.getResponse();
+
+        if (response.getIsValid()) {
+            Long userId = userServiceClient.getUserInfo().getResponse().getUserId();
+            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(userId);
+            Set<Long> starredPropertyIds = starredProperties.stream()
+                    .map(StarredProperty::getPropertyId)
+                    .collect(Collectors.toSet());
+
+            properties.forEach(property -> property.setIsStarred(starredPropertyIds.contains(property.getPropertyId())));
         }
-
-//        if (userService.isLoggedIn()) {
-//            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
-//            List<Long> starredIds = starredProperties.stream()
-//                    .map(StarredProperty::getPropertyId)
-//                    .collect(Collectors.toList());
-//            return properties.stream()
-//                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
-//                    .collect(Collectors.toList());
-//        } else {
         return properties;
-//        }
     }
-
-    public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto){
+  
+    @Transactional
+    public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
         Property property = optProperty.get();
-        return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice(), property.getArticleName());
+        return propertyMapper.toPropertyAreaPriceResponseDto(property);
     }
 
     private String[] makeNewTypes(String types) {
         String[] typeList = types.split(":");
         List<String> newList = new ArrayList<>();
 
-        for(String type: typeList){
-            if(type.equals("JT")){
+        for (String type : typeList) {
+            if (type.equals("JT")) {
                 newList.add("DDDGG");
                 newList.add("SGJT");
                 newList.add("HOJT");
                 newList.add("JWJT");
-            } else{
+            } else {
                 newList.add(type);
             }
         }
