@@ -16,6 +16,7 @@ import com.billybang.propertyservice.repository.PropertyRepository;
 import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PropertyService {
@@ -37,7 +39,7 @@ public class PropertyService {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
-        return propertyRepository.findPropertyList(
+        List<PropertyResponseDto> propertyList = propertyRepository.findPropertyList(
                 realEstateTypes,
                 tradeTypes,
                 requestDto.getPriceMin(),
@@ -47,6 +49,9 @@ public class PropertyService {
                 requestDto.getTopLat(),
                 requestDto.getBottomLat()
         );
+
+        log.info("properties, cnt: {}", propertyList.get(0).getCnt());
+        return propertyList;
     }
 
     @Transactional
