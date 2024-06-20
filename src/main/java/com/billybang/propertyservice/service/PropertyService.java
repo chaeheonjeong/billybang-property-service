@@ -1,11 +1,13 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
+import com.billybang.propertyservice.model.dto.response.ValidateTokenResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.StarredProperty;
@@ -31,7 +33,7 @@ public class PropertyService {
     private StarredPropertyRepository starredPropertyRepository;
     private UserServiceClient userServiceClient;
 
-    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto){
+    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
@@ -62,25 +64,27 @@ public class PropertyService {
                 requestDto.getLongitude()
         );
 
-        for(Property property : properties){
+        for (Property property : properties) {
             System.out.println("**");
             System.out.println(property);
         }
 
-//        if (userService.isLoggedIn()) {
-//            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
-//            List<Long> starredIds = starredProperties.stream()
-//                    .map(StarredProperty::getPropertyId)
-//                    .collect(Collectors.toList());
-//            return properties.stream()
-//                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
-//                    .collect(Collectors.toList());
-//        } else {
+        ApiResult<ValidateTokenResponseDto> validateTokenResult = userServiceClient.validateToken();
+        ValidateTokenResponseDto response = validateTokenResult.getResponse();
+
+        if (response.getIsValid()) {
+            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
+            List<Long> starredIds = starredProperties.stream()
+                    .map(StarredProperty::getPropertyId)
+                    .toList();
+            return properties.stream()
+                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
+                    .collect(Collectors.toList());
+        }
         return properties;
-//        }
     }
 
-    public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto){
+    public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
         Property property = optProperty.get();
         return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice(), property.getArticleName());
@@ -90,13 +94,13 @@ public class PropertyService {
         String[] typeList = types.split(":");
         List<String> newList = new ArrayList<>();
 
-        for(String type: typeList){
-            if(type.equals("JT")){
+        for (String type : typeList) {
+            if (type.equals("JT")) {
                 newList.add("DDDGG");
                 newList.add("SGJT");
                 newList.add("HOJT");
                 newList.add("JWJT");
-            } else{
+            } else {
                 newList.add(type);
             }
         }
