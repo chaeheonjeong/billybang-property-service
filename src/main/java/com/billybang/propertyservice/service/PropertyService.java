@@ -39,6 +39,14 @@ public class PropertyService {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
+        for (String realEstateType : realEstateTypes) {
+            System.out.println(realEstateType);
+        }
+
+        for (String tradeType : tradeTypes) {
+            System.out.println(tradeType);
+        }
+
         List<PropertyResponseDto> propertyList = propertyRepository.findPropertyList(
                 realEstateTypes,
                 tradeTypes,
