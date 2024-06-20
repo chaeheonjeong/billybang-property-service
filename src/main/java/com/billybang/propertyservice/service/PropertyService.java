@@ -21,10 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,13 +69,13 @@ public class PropertyService {
         ValidateTokenResponseDto response = validateTokenResult.getResponse();
 
         if (response.getIsValid()) {
-            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
-            List<Long> starredIds = starredProperties.stream()
+            Long userId = userServiceClient.getUserInfo().getResponse().getUserId();
+            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(userId);
+            Set<Long> starredPropertyIds = starredProperties.stream()
                     .map(StarredProperty::getPropertyId)
-                    .toList();
-            return properties.stream()
-                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
+
+            properties.forEach(property -> property.setIsStarred(starredPropertyIds.contains(property.getPropertyId())));
         }
         return properties;
     }
