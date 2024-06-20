@@ -1,11 +1,13 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
+import com.billybang.propertyservice.model.dto.response.ValidateTokenResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.StarredProperty;
@@ -66,20 +68,21 @@ public class PropertyService {
                 pageable
         );
 
+        ApiResult<ValidateTokenResponseDto> validateTokenResult = userServiceClient.validateToken();
+        ValidateTokenResponseDto response = validateTokenResult.getResponse();
 
-//        if (userService.isLoggedIn()) {
-//            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
-//            List<Long> starredIds = starredProperties.stream()
-//                    .map(StarredProperty::getPropertyId)
-//                    .collect(Collectors.toList());
-//            return properties.stream()
-//                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
-//                    .collect(Collectors.toList());
-//        } else {
+        if (response.getIsValid()) {
+            List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(getUserId());
+            List<Long> starredIds = starredProperties.stream()
+                    .map(StarredProperty::getPropertyId)
+                    .toList();
+            return properties.stream()
+                    .map(property -> new PropertyDetailResponseDto(property, starredIds.contains(property.getId())))
+                    .collect(Collectors.toList());
+        }
         return properties;
-//        }
     }
-
+  
     @Transactional
     public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
