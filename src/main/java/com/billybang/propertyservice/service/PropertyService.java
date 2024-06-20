@@ -11,12 +11,14 @@ import com.billybang.propertyservice.model.dto.response.ValidateTokenResponseDto
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.StarredProperty;
+import com.billybang.propertyservice.model.mapper.PropertyMapper;
 import com.billybang.propertyservice.repository.PropertyRepository;
 import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,12 +29,13 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@Transactional
 public class PropertyService {
     private PropertyRepository propertyRepository;
     private StarredPropertyRepository starredPropertyRepository;
     private UserServiceClient userServiceClient;
+    private PropertyMapper propertyMapper;
 
+    @Transactional
     public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
@@ -49,25 +52,21 @@ public class PropertyService {
         );
     }
 
-    public List<?> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
+    @Transactional
+    public Slice<PropertyDetailResponseDto> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
-
         Pageable pageable = PageRequest.of(page, size);
 
-        List<Property> properties = propertyRepository.findPropertyDetailList(
+        Slice<PropertyDetailResponseDto> properties = propertyRepository.findPropertyDetailList(
                 realEstateTypes,
                 tradeTypes,
                 requestDto.getPriceMin(),
                 requestDto.getPriceMax(),
                 requestDto.getLatitude(),
-                requestDto.getLongitude()
+                requestDto.getLongitude(),
+                pageable
         );
-
-        for (Property property : properties) {
-            System.out.println("**");
-            System.out.println(property);
-        }
 
         ApiResult<ValidateTokenResponseDto> validateTokenResult = userServiceClient.validateToken();
         ValidateTokenResponseDto response = validateTokenResult.getResponse();
@@ -83,11 +82,12 @@ public class PropertyService {
         }
         return properties;
     }
-
+  
+    @Transactional
     public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
         Property property = optProperty.get();
-        return new PropertyAreaPriceResponseDto(property.getTradeType(), property.getArea2(), property.getPrice(), property.getArticleName());
+        return propertyMapper.toPropertyAreaPriceResponseDto(property);
     }
 
     private String[] makeNewTypes(String types) {

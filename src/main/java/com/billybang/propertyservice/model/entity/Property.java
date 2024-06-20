@@ -1,17 +1,17 @@
 package com.billybang.propertyservice.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "properties")
+@Table(name = "properties", indexes = {
+        @Index(name = "idx_longitude", columnList = "longitude"),
+        @Index(name = "idx_latitude", columnList = "latitude"),
+        @Index(name = "idx_longitude_latitude", columnList = "longitude, latitude"),
+})
 public class Property {
     @Id
     @Column(name = "property_id", unique = true)

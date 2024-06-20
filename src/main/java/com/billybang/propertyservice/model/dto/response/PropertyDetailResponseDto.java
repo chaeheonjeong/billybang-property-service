@@ -17,32 +17,29 @@ public class PropertyDetailResponseDto {
     private String articleFeatureDesc;
     private String articleConfirmYmd;
     private String areaName;
-    private int area1;
-    private int area2;
+    private Integer area1;
+    private Integer area2;
     private String floorInfo;
-    private int price;
+    private Integer price;
     private String jibeonAddress;
     private String roadAddress;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String articleUrl;
     private String representativeImgUrl;
-    private int sameAddrCnt;
+    private Integer sameAddrCnt;
     private String realtorName;
     private String cpName;
     private String tags;
     private String direction;
-    private boolean isStarred;
+    private Boolean isStarred;
 
-    public PropertyDetailResponseDto(Property property, boolean isStarred) {
-        this.propertyId = property.getId();
-        this.articleName = property.getArticleName();
-        this.buildingName = property.getBuildingName();
-        this.realEstateType = property.getRealEstateType();
-        this.tradeType = property.getTradeType();
-        this.price = property.getPrice();
-        this.latitude = property.getLatitude();
-        this.longitude = property.getLongitude();
-        this.isStarred = isStarred;
+    public PropertyDetailResponseDto(Long id, String realEstateType, String tradeType, int price, double latitude, double longitude) {
+        this.propertyId = id;
+        this.realEstateType = realEstateType;
+        this.tradeType = tradeType;
+        this.price = price;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
