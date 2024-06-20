@@ -1,6 +1,7 @@
 package com.billybang.propertyservice.model.mapper;
 
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
+import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,4 +15,6 @@ import org.springframework.stereotype.Component;
 public interface PropertyMapper {
 
     PropertyAreaPriceResponseDto toPropertyAreaPriceResponseDto(Property property);
+
+    PropertyResponseDto toPropertyResponseDto(Property property);
 }

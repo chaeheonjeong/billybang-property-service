@@ -47,19 +47,17 @@ public class PropertyService {
             System.out.println(tradeType);
         }
 
-        List<PropertyResponseDto> propertyList = propertyRepository.findPropertyList(
+        List<Property> properties = propertyRepository.findProperties(
                 realEstateTypes,
                 tradeTypes,
-                requestDto.getPriceMin(),
-                requestDto.getPriceMax(),
-                requestDto.getLeftLon(),
-                requestDto.getRightLon(),
                 requestDto.getTopLat(),
-                requestDto.getBottomLat()
+                requestDto.getLeftLon()
         );
 
-        log.info("properties, cnt: {}", propertyList.get(0).getCnt());
-        return propertyList;
+        log.info("find properties");
+        return properties.stream()
+                .map(propertyMapper::toPropertyResponseDto)
+                .toList();
     }
 
     @Transactional
