@@ -8,9 +8,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PropertyResponseDto {
-    private Long cnt;
-    private int price;
-    private int area;
-    private double latitude;
-    private double longitude;
+    private Long representativeId;
+    private Integer cnt;
+    private Integer price;
+    private Integer area;
+    private Double latitude;
+    private Double longitude;
 }
