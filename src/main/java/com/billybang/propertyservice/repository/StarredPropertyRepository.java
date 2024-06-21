@@ -8,8 +8,6 @@ import java.util.List;
 
 @Repository
 public interface StarredPropertyRepository extends JpaRepository<StarredProperty, Long> {
-    StarredProperty save(StarredProperty starredProperty);
-
     List<StarredProperty> findByUserId(Long userId);
     void deleteByUserIdAndPropertyId(Long userId, Long propertyId);
 }

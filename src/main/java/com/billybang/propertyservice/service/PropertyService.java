@@ -17,6 +17,7 @@ import com.billybang.propertyservice.repository.StarredPropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -35,38 +36,38 @@ public class PropertyService {
     private PropertyMapper propertyMapper;
 
     @Transactional
-    public List<PropertyResponseDto> findPropertyList(PropertyRequestDto requestDto) {
+    public List<PropertyResponseDto> findProperties(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
 
-        for (String realEstateType : realEstateTypes) {
-            System.out.println(realEstateType);
-        }
-
-        for (String tradeType : tradeTypes) {
-            System.out.println(tradeType);
-        }
-
-        List<Property> properties = propertyRepository.findProperties(
+        List<Property> properties = propertyRepository.findPropertiesByRange(
                 realEstateTypes,
                 tradeTypes,
+                requestDto.getPriceMin(),
+                requestDto.getPriceMax(),
+                requestDto.getLeftLon(),
+                requestDto.getRightLon(),
                 requestDto.getTopLat(),
-                requestDto.getLeftLon()
-        );
+                requestDto.getBottomLat());
 
-        log.info("find properties");
-        return properties.stream()
-                .map(propertyMapper::toPropertyResponseDto)
+        Map<AbstractMap.SimpleEntry<Double, Double>, List<Property>> groupedProperties = properties.stream()
+                .collect(Collectors.groupingBy(
+                        property -> new AbstractMap.SimpleEntry<>(property.getLatitude(), property.getLongitude())
+                ));
+
+        return groupedProperties.entrySet().stream()
+                .map(PropertyService::convertPropertyResponseDto)
                 .toList();
     }
 
+
     @Transactional
-    public Slice<PropertyDetailResponseDto> findPropertyDetailList(PropertyDetailRequestDto requestDto, int page, int size) {
+    public Slice<PropertyDetailResponseDto> findPropertyDetails(PropertyDetailRequestDto requestDto, int page, int size) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
         String[] tradeTypes = requestDto.getTradeType().split(":");
         Pageable pageable = PageRequest.of(page, size);
 
-        Slice<PropertyDetailResponseDto> properties = propertyRepository.findPropertyDetailList(
+        Slice<Property> properties = propertyRepository.findPropertiesByExactLocation(
                 realEstateTypes,
                 tradeTypes,
                 requestDto.getPriceMin(),
@@ -75,9 +76,11 @@ public class PropertyService {
                 requestDto.getLongitude(),
                 pageable
         );
-
         ApiResult<ValidateTokenResponseDto> validateTokenResult = userServiceClient.validateToken();
         ValidateTokenResponseDto response = validateTokenResult.getResponse();
+
+        Slice<PropertyDetailResponseDto> propertyDetails = properties.map(property ->
+                new PropertyDetailResponseDto(property, null));
 
         if (response.getIsValid()) {
             Long userId = userServiceClient.getUserInfo().getResponse().getUserId();
@@ -86,11 +89,13 @@ public class PropertyService {
                     .map(StarredProperty::getPropertyId)
                     .collect(Collectors.toSet());
 
-            properties.forEach(property -> property.setIsStarred(starredPropertyIds.contains(property.getPropertyId())));
+            propertyDetails.getContent().forEach(propertyDetail ->
+                    propertyDetail.setIsStarred(starredPropertyIds.contains(propertyDetail.getPropertyId())));
         }
-        return properties;
+
+        return propertyDetails;
     }
-  
+
     @Transactional
     public PropertyAreaPriceResponseDto findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
         Optional<Property> optProperty = propertyRepository.findById(requestDto.getPropertyId());
@@ -114,6 +119,18 @@ public class PropertyService {
         }
 
         return newList.toArray(new String[0]);
+    }
+
+    @NotNull
+    private static PropertyResponseDto convertPropertyResponseDto(Map.Entry<AbstractMap.SimpleEntry<Double, Double>, List<Property>> entry) {
+        List<Property> groupedList = entry.getValue();
+        long count = groupedList.size();
+        int minPrice = groupedList.stream().mapToInt(Property::getPrice).min().orElse(0);
+        double latitude = entry.getKey().getKey();
+        double longitude = entry.getKey().getValue();
+        int area1 = groupedList.get(0).getArea1();
+
+        return new PropertyResponseDto(count, minPrice, area1, latitude, longitude);
     }
 
     private Long getUserId() {

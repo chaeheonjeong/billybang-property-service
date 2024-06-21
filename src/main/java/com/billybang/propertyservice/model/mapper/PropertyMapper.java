@@ -1,6 +1,7 @@
 package com.billybang.propertyservice.model.mapper;
 
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
+import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.model.entity.Property;
 import org.mapstruct.Mapper;
@@ -17,4 +18,6 @@ public interface PropertyMapper {
     PropertyAreaPriceResponseDto toPropertyAreaPriceResponseDto(Property property);
 
     PropertyResponseDto toPropertyResponseDto(Property property);
+
+    PropertyDetailResponseDto toPropertyDetailResponseDto(Property property);
 }

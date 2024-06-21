@@ -37,16 +37,14 @@ public class PropertyController implements PropertyApi {
     private PropertyService propertyService;
 
     public ResponseEntity<ApiResult<List<PropertyResponseDto>>> findProperties(PropertyRequestDto requestDto) {
-        log.info("request dto, real estate type: {}", requestDto.getRealEstateType());
-        List<PropertyResponseDto> properties = propertyService.findPropertyList(requestDto);
-        log.info("test after property service executed");
+        List<PropertyResponseDto> properties = propertyService.findProperties(requestDto);
         return ResponseEntity.ok(ApiUtils.success(properties));
     }
 
     public ResponseEntity<ApiResult<PageResult<PropertyDetailResponseDto>>> findPropertyDetail(PropertyDetailRequestDto requestDto,
                                                                                                @RequestParam(defaultValue = "0") int page,
                                                                                                @RequestParam(defaultValue = "10") int size) {
-        Slice<PropertyDetailResponseDto> sliceProperties = propertyService.findPropertyDetailList(requestDto, page, size);
+        Slice<PropertyDetailResponseDto> sliceProperties = propertyService.findPropertyDetails(requestDto, page, size);
         PaginationInfo paginationInfo = new PaginationInfo(sliceProperties.hasNext(), sliceProperties.getNumber(),
                 sliceProperties.getSize(),
                 sliceProperties.getNumberOfElements());
