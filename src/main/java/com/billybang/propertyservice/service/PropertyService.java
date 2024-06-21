@@ -124,13 +124,23 @@ public class PropertyService {
     @NotNull
     private static PropertyResponseDto convertPropertyResponseDto(Map.Entry<AbstractMap.SimpleEntry<Double, Double>, List<Property>> entry) {
         List<Property> groupedList = entry.getValue();
-        long count = groupedList.size();
-        int minPrice = groupedList.stream().mapToInt(Property::getPrice).min().orElse(0);
-        double latitude = entry.getKey().getKey();
-        double longitude = entry.getKey().getValue();
-        int area1 = groupedList.get(0).getArea1();
+        Property bestProperty = groupedList.stream()
+                .min(Comparator.comparingInt(Property::getPrice)
+                        .thenComparingInt(Property::getArea1).reversed())
+                .orElse(null);
 
-        return new PropertyResponseDto(count, minPrice, area1, latitude, longitude);
+        if (bestProperty == null) {
+            throw new IllegalArgumentException("No properties found in group");
+        }
+
+        Long representativeId = bestProperty.getId();
+        Integer count = groupedList.size();
+        Integer minPrice = bestProperty.getPrice();
+        Double latitude = entry.getKey().getKey();
+        Double longitude = entry.getKey().getValue();
+        Integer area1 = bestProperty.getArea1();
+
+        return new PropertyResponseDto(representativeId, count, minPrice, area1, latitude, longitude);
     }
 
     private Long getUserId() {
