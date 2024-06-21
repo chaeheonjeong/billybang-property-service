@@ -3,10 +3,12 @@ package com.billybang.propertyservice.model.dto.response;
 import com.billybang.propertyservice.model.entity.Property;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PropertyDetailResponseDto {
     private Long propertyId;
@@ -34,12 +36,30 @@ public class PropertyDetailResponseDto {
     private String direction;
     private Boolean isStarred;
 
-    public PropertyDetailResponseDto(Long id, String realEstateType, String tradeType, int price, double latitude, double longitude) {
-        this.propertyId = id;
-        this.realEstateType = realEstateType;
-        this.tradeType = tradeType;
-        this.price = price;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public PropertyDetailResponseDto(Property property, Boolean isStarred) {
+        this.propertyId = property.getId();
+        this.articleName = property.getArticleName();
+        this.buildingName = property.getBuildingName();
+        this.realEstateType = property.getRealEstateType();
+        this.tradeType = property.getTradeType();
+        this.articleFeatureDesc = property.getArticleFeatureDesc();
+        this.articleConfirmYmd = property.getArticleConfirmYmd();
+        this.areaName = property.getAreaName();
+        this.area1 = property.getArea1();
+        this.area2 = property.getArea2();
+        this.floorInfo = property.getFloorInfo();
+        this.price = property.getPrice();
+        this.jibeonAddress = property.getJibeonAddress();
+        this.roadAddress = property.getRoadAddress();
+        this.latitude = property.getLatitude();
+        this.longitude = property.getLongitude();
+        this.articleUrl = property.getArticleUrl();
+        this.representativeImgUrl = property.getRepresentativeImgUrl();
+        this.sameAddrCnt = property.getSameAddrCnt();
+        this.realtorName = property.getRealtorName();
+        this.cpName = property.getCpName();
+        this.tags = property.getTags();
+        this.direction = property.getDirection();
+        this.isStarred = isStarred;
     }
 }
