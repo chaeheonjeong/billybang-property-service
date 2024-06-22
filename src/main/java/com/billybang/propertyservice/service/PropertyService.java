@@ -83,7 +83,7 @@ public class PropertyService {
                 new PropertyDetailResponseDto(property, null));
 
         if (response.getIsValid()) {
-            Long userId = userServiceClient.getUserInfo().getResponse().getUserId();
+            Long userId = getUserId();
             List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(userId);
             Set<Long> starredPropertyIds = starredProperties.stream()
                     .map(StarredProperty::getPropertyId)
