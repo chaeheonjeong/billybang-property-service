@@ -1,4 +1,5 @@
 config.properties
+src/main/resources/data/
 
 HELP.md
 .gradle

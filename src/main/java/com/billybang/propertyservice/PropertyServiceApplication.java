@@ -47,23 +47,23 @@ public class PropertyServiceApplication {
 //        };
 //    }
 
-//    @Bean
-//    public CommandLineRunner importStatistics(DistrictStatisticDataSaverService districtStatisticDataSaverService, AreaStatisticDataSaverService areaStatisticDataSaverService) {
-//        return args -> {
-//            String districtCsvFilePath = "data/구별_통계.csv";
-//            String AreaCsvFilePath = "data/동별_통계.csv";
-//
-//            Resource disResource = new ClassPathResource(districtCsvFilePath);
-//            Resource areaResource = new ClassPathResource(AreaCsvFilePath);
-//            try (InputStream disInputStream = disResource.getInputStream();
-//                 InputStream areaInputStream = areaResource.getInputStream()) {
-//
-//                districtStatisticDataSaverService.saveDistrictStatisticsFromCSV(disInputStream);
-//                areaStatisticDataSaverService.saveAreaStatisticsFromCSV(areaInputStream);
-//                System.out.println("CSV data imported successfully!");
-//            } catch (IOException e) {
-//                System.out.println("Failed to import CSV data: " + e.getMessage());
-//            }
-//        };
-//    }
+    @Bean
+    public CommandLineRunner importStatistics(DistrictStatisticDataSaverService districtStatisticDataSaverService, AreaStatisticDataSaverService areaStatisticDataSaverService) {
+        return args -> {
+            String districtCsvFilePath = "data/구별_통계.csv";
+            String AreaCsvFilePath = "data/동별_통계.csv";
+
+            Resource disResource = new ClassPathResource(districtCsvFilePath);
+            Resource areaResource = new ClassPathResource(AreaCsvFilePath);
+            try (InputStream disInputStream = disResource.getInputStream();
+                 InputStream areaInputStream = areaResource.getInputStream()) {
+
+                districtStatisticDataSaverService.saveDistrictStatisticsFromCSV(disInputStream);
+                areaStatisticDataSaverService.saveAreaStatisticsFromCSV(areaInputStream);
+                System.out.println("CSV data imported successfully!");
+            } catch (IOException e) {
+                System.out.println("Failed to import CSV data: " + e.getMessage());
+            }
+        };
+    }
 }
