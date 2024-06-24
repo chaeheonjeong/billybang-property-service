@@ -28,10 +28,10 @@ public class AreaStatisticDataSaverService {
                 }
 
                 String[] data = line.split(",");
-                if (data.length == 3) {
+                if (data.length == 4) {
 
                     Area area = new Area();
-                    area.setDistrictId(Long.valueOf(data[0]));
+                    area.setDistrictId(Long.valueOf(data[3]));
                     area.setAreaName(data[1]);
                     area.setPopulationDensity(Double.parseDouble(data[2]));
 

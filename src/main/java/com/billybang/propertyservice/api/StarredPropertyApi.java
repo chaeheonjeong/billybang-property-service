@@ -1,6 +1,5 @@
 package com.billybang.propertyservice.api;
 
-import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.entity.Property;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -8,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +21,8 @@ public interface StarredPropertyApi {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
-    @PostMapping()
-    ResponseEntity<ApiResult<?>> addStarredProperty(@Valid @RequestBody PropertyIdRequestDto requestDto);
+    @PostMapping("/{propertyId}")
+    ResponseEntity<ApiResult<?>> addStarredProperty(@PathVariable Long propertyId);
 
     @Operation(summary = "즐겨찾기 매물 조회", description = "즐겨찾기 매물을 조회합니다.")
     @ApiResponses(value = {
@@ -41,6 +39,6 @@ public interface StarredPropertyApi {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
-    @DeleteMapping()
-    ResponseEntity<ApiResult<?>> deleteStarredProperty(@Valid @RequestBody PropertyIdRequestDto requestDto);
+    @DeleteMapping("/{propertyId}")
+    ResponseEntity<ApiResult<?>> deleteStarredProperty(@PathVariable Long propertyId);
 }

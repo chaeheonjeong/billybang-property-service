@@ -13,7 +13,6 @@ import lombok.ToString;
 public class District {
     @Id
     @Column(name = "district_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 10)
     private String districtName;

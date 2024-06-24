@@ -12,6 +12,7 @@ public class PropertyResponseDto {
     private Integer cnt;
     private Integer price;
     private Integer area;
+    private String name;
     private Double latitude;
     private Double longitude;
 }

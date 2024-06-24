@@ -87,30 +87,30 @@ public class NewsCrawlingService {
     }
 
     private void initialRegoinList(){
-        regionList.add(new CrawlingRegion("1111000000", "종로구", 1L));
-        regionList.add(new CrawlingRegion("1114000000", "중구", 2L));
-        regionList.add(new CrawlingRegion("1117000000", "용산구", 3L));
-        regionList.add(new CrawlingRegion("1120000000", "성동구", 4L));
-        regionList.add(new CrawlingRegion("1121500000", "광진구", 5L));
-        regionList.add(new CrawlingRegion("1123000000", "동대문구", 6L));
-        regionList.add(new CrawlingRegion("1126000000", "중랑구", 7L));
-        regionList.add(new CrawlingRegion("1129000000", "성북구", 8L));
-        regionList.add(new CrawlingRegion("1130500000", "강북구", 9L));
-        regionList.add(new CrawlingRegion("1132000000", "도봉구", 10L));
-        regionList.add(new CrawlingRegion("1135000000", "노원구", 11L));
-        regionList.add(new CrawlingRegion("1138000000", "은평구", 12L));
-        regionList.add(new CrawlingRegion("1141000000", "서대문구", 13L));
-        regionList.add(new CrawlingRegion("1144000000", "마포구", 14L));
-        regionList.add(new CrawlingRegion("1147000000", "양천구", 15L));
-        regionList.add(new CrawlingRegion("1150000000", "강서구", 16L));
-        regionList.add(new CrawlingRegion("1153000000", "구로구", 17L));
-        regionList.add(new CrawlingRegion("1154500000", "금천구", 18L));
-        regionList.add(new CrawlingRegion("1156000000", "영등포구", 19L));
-        regionList.add(new CrawlingRegion("1159000000", "동작구", 20L));
-        regionList.add(new CrawlingRegion("1162000000", "관악구", 21L));
-        regionList.add(new CrawlingRegion("1165000000", "서초구", 22L));
-        regionList.add(new CrawlingRegion("1168000000", "강남구", 23L));
-        regionList.add(new CrawlingRegion("1171000000", "송파구", 24L));
-        regionList.add(new CrawlingRegion("1174000000", "강동구", 25L));
+        regionList.add(new CrawlingRegion("1111000000", "종로구", 11110L));
+        regionList.add(new CrawlingRegion("1114000000", "중구", 11140L));
+        regionList.add(new CrawlingRegion("1117000000", "용산구", 11170L));
+        regionList.add(new CrawlingRegion("1120000000", "성동구", 11200L));
+        regionList.add(new CrawlingRegion("1121500000", "광진구", 11215L));
+        regionList.add(new CrawlingRegion("1123000000", "동대문구", 11230L));
+        regionList.add(new CrawlingRegion("1126000000", "중랑구", 11260L));
+        regionList.add(new CrawlingRegion("1129000000", "성북구", 11290L));
+        regionList.add(new CrawlingRegion("1130500000", "강북구", 11305L));
+        regionList.add(new CrawlingRegion("1132000000", "도봉구", 11320L));
+        regionList.add(new CrawlingRegion("1135000000", "노원구", 11350L));
+        regionList.add(new CrawlingRegion("1138000000", "은평구", 11380L));
+        regionList.add(new CrawlingRegion("1141000000", "서대문구", 11410L));
+        regionList.add(new CrawlingRegion("1144000000", "마포구", 11440L));
+        regionList.add(new CrawlingRegion("1147000000", "양천구", 11470L));
+        regionList.add(new CrawlingRegion("1150000000", "강서구", 11500L));
+        regionList.add(new CrawlingRegion("1153000000", "구로구", 11530L));
+        regionList.add(new CrawlingRegion("1154500000", "금천구", 11545L));
+        regionList.add(new CrawlingRegion("1156000000", "영등포구", 11560L));
+        regionList.add(new CrawlingRegion("1159000000", "동작구", 11590L));
+        regionList.add(new CrawlingRegion("1162000000", "관악구", 11620L));
+        regionList.add(new CrawlingRegion("1165000000", "서초구", 11650L));
+        regionList.add(new CrawlingRegion("1168000000", "강남구", 11680L));
+        regionList.add(new CrawlingRegion("1171000000", "송파구", 11710L));
+        regionList.add(new CrawlingRegion("1174000000", "강동구", 11740L));
     }
 }

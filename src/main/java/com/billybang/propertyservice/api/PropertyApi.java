@@ -1,9 +1,7 @@
 package com.billybang.propertyservice.api;
 
-import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
-import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
@@ -12,20 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "Property API", description = "매물 API")
 @RequestMapping("/properties")
 public interface PropertyApi {
-
     @Operation(summary = "매물 조회", description = "조건에 맞는 매물을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -52,6 +44,15 @@ public interface PropertyApi {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "405", description = "Method Not Allowed")
     })
-    @GetMapping("/area-price")
-    ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(@Valid @ModelAttribute PropertyIdRequestDto requestDto);
+    @GetMapping("/{propertyId}/area-price")
+    ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(@PathVariable Long propertyId);
+
+    @Operation(summary = "매물 id로 매물 조회", description = "매물 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "405", description = "Method Not Allowed")
+    })
+    @GetMapping("/{propertyId}")
+    ResponseEntity<ApiResult<PropertyDetailResponseDto>> findPropertyById(@PathVariable Long propertyId);
 }
