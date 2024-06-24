@@ -1,5 +1,5 @@
 package com.billybang.propertyservice.service;
-
+import org.springframework.core.io.ResourceLoader;
 import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.client.UserServiceClient;
 import com.billybang.propertyservice.model.DistrictAreaInfo;
@@ -17,14 +17,13 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,7 @@ public class PropertyService {
     private final UserServiceClient userServiceClient;
     private final PropertyMapper propertyMapper;
     private final PropertyRepositoryCustom propertyRepositoryCustom;
+    private final ResourceLoader resourceLoader;
     private static  final Map<Long, DistrictAreaInfo> areaInfo = new HashMap<>();
     private static final Map<Long, DistrictAreaInfo> districtInfo = new HashMap<>();
 
@@ -158,8 +158,11 @@ public class PropertyService {
 
     @PostConstruct
     public void initDistrictAreaInfo(){
-        String csvFile = "src/main/resources/data/districtAreaInfo.csv";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        String filePath = "data/districtAreaInfo.csv";
+        Resource resource = resourceLoader.getResource("classpath:" + filePath);
+
+        try (InputStream inputStream = resource.getInputStream();
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             br.readLine();
             while ((line = br.readLine()) != null) {
