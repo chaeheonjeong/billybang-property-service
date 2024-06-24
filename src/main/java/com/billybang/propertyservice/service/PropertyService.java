@@ -158,7 +158,7 @@ public class PropertyService {
 
     @PostConstruct
     public void initDistrictAreaInfo(){
-        String csvFile = "src/main/resources/data/지역위경도.csv";
+        String csvFile = "src/main/resources/data/districtAreaInfo.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             String line;
             br.readLine();
