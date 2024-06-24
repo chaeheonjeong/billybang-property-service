@@ -11,11 +11,15 @@ import lombok.Setter;
         @Index(name = "idx_longitude", columnList = "longitude"),
         @Index(name = "idx_latitude", columnList = "latitude"),
         @Index(name = "idx_longitude_latitude", columnList = "longitude, latitude"),
+        @Index(name = "idx_district_id", columnList = "districtId"),
+        @Index(name = "idx_area_id", columnList = "areaId")
 })
 public class Property {
     @Id
     @Column(name = "property_id", unique = true)
     private Long id;
+    private Long districtId;
+    private Long areaId;
     @Column(length = 30)
     private String articleName;
     @Column(length = 10)

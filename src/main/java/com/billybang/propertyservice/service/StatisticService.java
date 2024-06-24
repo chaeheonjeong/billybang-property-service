@@ -42,22 +42,22 @@ public class StatisticService {
     }
 
     private void initializeMaps(List<District> districts){
-        initializeDensityMap();
+        initializeDensityMap(districts);
         initializeIncomeMap(districts);
         initializeCrimeCountMap(districts);
         initializePopulationCountMap(districts);
     }
 
-    private void initializeDensityMap() {
-        for(int i=1; i<= 25; i++){
-            List<Area> areas = areaRepository.findByDistrictId((long)i);
+    private void initializeDensityMap(List<District> districts) {
+        for(District district : districts){
+            List<Area> areas = areaRepository.findByDistrictId(district.getId());
 
             HashMap<String, Double> areaDensities = new HashMap<>();
             for(Area area: areas) {
                 areaDensities.put(area.getAreaName(), area.getPopulationDensity());
             }
 
-            populationDensities.put((long) i, areaDensities);
+            populationDensities.put(district.getId(), areaDensities);
         }
     }
 

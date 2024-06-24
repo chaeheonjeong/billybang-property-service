@@ -1,38 +1,96 @@
 package com.billybang.propertyservice.service;
 
+import com.billybang.propertyservice.ReverseGeocoding;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.repository.PropertyDataSaverRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-@Transactional
-@AllArgsConstructor
 public class PropertyDataSaverService {
     private final PropertyDataSaverRepository propertyDataSaverRepository;
+    private Map<String, Map<String, String>> districtAreaMap = new HashMap<>();
 
-    public void saveProperties(List<Property> properties) {
-        System.out.println(properties.get(0));
-        for (Property property : properties) {
-            try {
-                propertyDataSaverRepository.save(property);
-            } catch (DataIntegrityViolationException e) {
-                continue;
+    public PropertyDataSaverService(PropertyDataSaverRepository propertyDataSaverRepository) {
+        this.propertyDataSaverRepository = propertyDataSaverRepository;
+    }
+
+    public void init() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/지역위경도.csv"))) {
+            String line;
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                String districtName = columns[2];
+                String areaName = columns[3];
+                String code = columns[0];
+
+                districtAreaMap
+                        .computeIfAbsent(districtName, k -> new HashMap<>())
+                        .put(areaName, code);
             }
         }
     }
 
+    @Transactional
+    public void saveDistrictAreaId() throws IOException {
+        init();
+        //List<Property> properties = propertyDataSaverRepository.findAll();
+        List<Property> properties = propertyDataSaverRepository.findByDistrictIdIsNull();
+        for(Property property: properties){
+            String address = property.getJibeonAddress();
+            String[] addArr = address.split(" ");
+
+            String districtName = addArr[1];
+            String areaName = addArr[2];
+            if (districtAreaMap.containsKey(districtName) && districtAreaMap.get(districtName).containsKey(areaName)) {
+                String code = districtAreaMap.get(districtName).get(areaName);
+                String districtId = code.substring(0, 5);
+                String areaId = code.substring(5);
+
+                property.setDistrictId(Long.valueOf(districtId));
+                property.setAreaId(Long.valueOf(areaId));
+
+                propertyDataSaverRepository.save(property);
+            }
+        }
+    }
+
+//    @Transactional
+//    public void saveAddress(){
+////        List<Property> properties = propertyDataSaverRepository.findAll();
+//
+//        ReverseGeocoding reverseGeocoding = new ReverseGeocoding();
+//        for(Property property: properties) {
+//            Map<String, String> addressMap = reverseGeocoding.getAddress(property.getLatitude(), property.getLongitude());
+//
+//            String roadAddress = addressMap.get("roadAddress");
+//            String jibeonAddress = addressMap.get("jibeonAddress");
+//
+//            if (roadAddress != null) {
+//                property.setRoadAddress(roadAddress);
+//            }
+//
+//            if (jibeonAddress != null) {
+//                property.setJibeonAddress(jibeonAddress);
+//            }
+//
+//            propertyDataSaverRepository.save(property);
+//        }
+//    }
+
+    @Transactional
     public void readJsonFiles(String folderPath) throws Exception{
         File folder = new File(folderPath);
         File[] subFolderPathList = folder.listFiles();
@@ -106,7 +164,7 @@ public class PropertyDataSaverService {
         saveProperties(properties);
     }
 
-    private String getStringValue(JSONObject json, String key) {
+    public String getStringValue(JSONObject json, String key) {
         return json.containsKey(key) ? json.get(key).toString() : null;
     }
 
@@ -133,5 +191,16 @@ public class PropertyDataSaverService {
             result += Integer.parseInt(price.trim()) / 100;
         }
         return result;
+    }
+
+    public void saveProperties(List<Property> properties) {
+        System.out.println(properties.get(0));
+        for (Property property : properties) {
+            try {
+                propertyDataSaverRepository.save(property);
+            } catch (DataIntegrityViolationException e) {
+                continue;
+            }
+        }
     }
 }

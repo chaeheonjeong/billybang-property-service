@@ -12,14 +12,6 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-class Test{
-    public static void main(String[] args) {
-        ReverseGeocoding reverseGeocoding = new ReverseGeocoding();
-        reverseGeocoding.getAddress(37.512886, 127.039825);
-        System.out.println(reverseGeocoding.getAddress(37.512886, 127.039825).get("roadAddress"));
-        System.out.println(reverseGeocoding.getAddress(37.512886, 127.039825).get("address"));
-    }
-}
 
 public class ReverseGeocoding {
     private static String clientId;
@@ -57,7 +49,7 @@ public class ReverseGeocoding {
             JSONArray results = jsonResponse.getJSONArray("results");
 
             String roadAddress = null;
-            String address = null;
+            String jibeonAddress = null;
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject result = results.getJSONObject(i);
@@ -82,15 +74,15 @@ public class ReverseGeocoding {
                     String number2 = result.getJSONObject("land").optString("number2", "");
 
                     if (!number2.isEmpty()) {
-                        address = area1 + " " + area2 + " " + area3 + " " + number1 + "-" + number2;
+                        jibeonAddress = area1 + " " + area2 + " " + area3 + " " + number1 + "-" + number2;
                     } else {
-                        address = area1 + " " + area2 + " " + area3 + " " + number1;
+                        jibeonAddress = area1 + " " + area2 + " " + area3 + " " + number1;
                     }
                 }
             }
 
             addressMap.put("roadAddress", roadAddress);
-            addressMap.put("address", address);
+            addressMap.put("jibeonAddress", jibeonAddress);
 
         } catch (Exception e) {
             e.printStackTrace();
