@@ -4,30 +4,21 @@ import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.api.ApiUtils;
 import com.billybang.propertyservice.api.PageResult;
 import com.billybang.propertyservice.api.PropertyApi;
-import com.billybang.propertyservice.exception.common.BError;
-import com.billybang.propertyservice.exception.common.CommonException;
 import com.billybang.propertyservice.model.PaginationInfo;
-import com.billybang.propertyservice.model.dto.request.PropertyIdRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyAreaPriceResponseDto;
 import com.billybang.propertyservice.model.dto.request.PropertyDetailRequestDto;
 import com.billybang.propertyservice.model.dto.request.PropertyRequestDto;
 import com.billybang.propertyservice.model.dto.response.PropertyDetailResponseDto;
 import com.billybang.propertyservice.model.dto.response.PropertyResponseDto;
 import com.billybang.propertyservice.service.PropertyService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -51,8 +42,13 @@ public class PropertyController implements PropertyApi {
         return ResponseEntity.ok(ApiUtils.success(new PageResult(sliceProperties.getContent(), paginationInfo)));
     }
 
-    public ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(PropertyIdRequestDto requestDto) {
-        PropertyAreaPriceResponseDto res = propertyService.findPropertyAreaPrice(requestDto);
+    public ResponseEntity<ApiResult<PropertyAreaPriceResponseDto>> findPropertyAreaPrice(Long propertyId) {
+        PropertyAreaPriceResponseDto res = propertyService.findPropertyAreaPrice(propertyId);
+        return ResponseEntity.ok(ApiUtils.success(res));
+    }
+
+    public ResponseEntity<ApiResult<PropertyDetailResponseDto>> findPropertyById(Long propertyId) {
+        PropertyDetailResponseDto res = propertyService.findPropertyById(propertyId);
         return ResponseEntity.ok(ApiUtils.success(res));
     }
 }

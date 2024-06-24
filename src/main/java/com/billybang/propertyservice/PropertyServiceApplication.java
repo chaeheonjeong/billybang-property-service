@@ -41,9 +41,28 @@ public class PropertyServiceApplication {
 //            String[] folderPathList = {"src/main/resources/data/원룸·투룸", "src/main/resources/data/아파트·오피스텔",
 //                    "src/main/resources/data/빌라·주택"};
 //
+//
+//
 //            for(String folderPath: folderPathList) {
 //                propertyDataSaverService.readJsonFiles(folderPath);
 //            }
+//        };
+//    }
+
+//    @Bean
+//    public CommandLineRunner test(PropertyDataSaverService propertyDataSaverService) {
+//        return (args) -> {
+//            propertyDataSaverService.saveAddress();
+//            System.out.println("도로명, 지번 주소 저장 완료");
+//        };
+//    }
+
+
+//    @Bean
+//    public CommandLineRunner test(PropertyDataSaverService propertyDataSaverService) {
+//        return (args) -> {
+//            propertyDataSaverService.saveDistrictAreaId();
+//            System.out.println("매물 구와 동 코드 저장 완료");
 //        };
 //    }
 

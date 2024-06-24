@@ -13,10 +13,10 @@ public class PropertyDetailRequestDto {
     private String realEstateType;
     @NotNull(message = "trade type is required.")
     private String tradeType;
-    @NotNull(message = "min price is required.")
-    private int priceMin;
-    @NotNull(message = "max price is required.")
-    private int priceMax;
+    private Integer dealPriceMin;
+    private Integer dealPriceMax;
+    private Integer leasePriceMin;
+    private Integer leasePriceMax;
     @NotNull(message = "latitude is required.")
     private double latitude;
     @NotNull(message = "longitude is required.")
