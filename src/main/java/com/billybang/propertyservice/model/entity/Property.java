@@ -10,9 +10,7 @@ import lombok.Setter;
 @Table(name = "properties", indexes = {
         @Index(name = "idx_longitude", columnList = "longitude"),
         @Index(name = "idx_latitude", columnList = "latitude"),
-        @Index(name = "idx_longitude_latitude", columnList = "longitude, latitude"),
-        @Index(name = "idx_district_id", columnList = "districtId"),
-        @Index(name = "idx_area_id", columnList = "areaId")
+        @Index(name = "idx_longitude_latitude", columnList = "longitude, latitude")
 })
 public class Property {
     @Id

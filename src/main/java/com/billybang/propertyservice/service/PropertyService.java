@@ -43,7 +43,7 @@ public class PropertyService {
     @Transactional
     public List<PropertyResponseDto> findProperties(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
-        String[] tradeTypes = requestDto.getTradeType().split(":");
+        List<String> tradeTypes = Arrays.asList(requestDto.getTradeType().split(":"));
         Integer leasePriceMin = requestDto.getLeasePriceMin();
         Integer leasePriceMax = requestDto.getLeasePriceMax();
         Integer dealPriceMin = requestDto.getDealPriceMin();
@@ -53,39 +53,86 @@ public class PropertyService {
         double topLat = requestDto.getTopLat();
         double bottomLat = requestDto.getBottomLat();
 
-        List<Property> properties = propertyRepositoryCustom.findPropertiesByRange(
-                realEstateTypes, tradeTypes, leasePriceMin, leasePriceMax,
-                dealPriceMin, dealPriceMax, leftLon, rightLon, topLat, bottomLat
-        );
 
         List<PropertyResponseDto> propertyResponseDtos = new ArrayList<>();
         if(requestDto.getZoom() >= 1 && requestDto.getZoom() <= 5){
-            propertyResponseDtos = getProperties(properties);
+            List<Property> propertiesByRange = propertyRepository.findPropertiesByRange(topLat, bottomLat, rightLon, leftLon);
+            List<Property> filteredProperties = propertiesByRange.stream()
+                    .filter(property -> containsRealEstateType(property.getRealEstateType(), realEstateTypes))
+                    .filter(property -> isWithinPriceRange(property, tradeTypes, leasePriceMin, leasePriceMax, dealPriceMin, dealPriceMax))
+                    .collect(Collectors.toList());
+            propertyResponseDtos = getProperties(filteredProperties);
 
         } else if(requestDto.getZoom() == 6 || requestDto.getZoom() == 7) {
-            List<Long> uniqueAreaIds = properties.stream()
-                    .map(Property::getAreaId)
-                    .distinct()
-                    .toList();
+            List<Long> areaIds = areaInfo.entrySet().stream()
+                    .filter(entry -> {
+                        double latitude = entry.getValue().getLatitude();
+                        double longitude = entry.getValue().getLongitude();
+                        return longitude >= leftLon && longitude <= rightLon && latitude >= bottomLat && latitude <= topLat;
+                    }).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<Tuple> areaStats = propertyRepositoryCustom.findStat(
-                    uniqueAreaIds, realEstateTypes, tradeTypes, leasePriceMin,
-                    leasePriceMax, dealPriceMin, dealPriceMax, "area");
-            propertyResponseDtos = getGuDongProperties(areaStats, "area");
+            if (areaIds.isEmpty()) {
+                return Collections.emptyList();
+            }
 
-        } else if(requestDto.getZoom() >= 8){
-            List<Long> uniqueDistrictIds = properties.stream()
-                    .map(Property::getDistrictId)
-                    .distinct()
-                    .toList();
+            for (Long areaId : areaIds) {
+                List<Property> properties = propertyRepository.findByAreaId(areaId).stream()
+                        .filter(property -> containsRealEstateType(property.getRealEstateType(), realEstateTypes))
+                        .filter(property -> isWithinPriceRange(property, tradeTypes, leasePriceMin, leasePriceMax, dealPriceMin, dealPriceMax))
+                        .collect(Collectors.toList());
 
-            List<Tuple> districtStats = propertyRepositoryCustom.findStat(
-                    uniqueDistrictIds, realEstateTypes, tradeTypes, leasePriceMin,
-                    leasePriceMax, dealPriceMin, dealPriceMax, "district");
-            propertyResponseDtos = getGuDongProperties(districtStats, "district");
+                int totalCount = properties.size();
+                double avgPrice = properties.stream().mapToInt(Property::getPrice).average().orElse(0);
+
+                DistrictAreaInfo info = areaInfo.get(areaId);
+                PropertyResponseDto dto = new PropertyResponseDto(
+                        areaId,
+                        totalCount,
+                        (int) avgPrice,
+                        null,
+                        info.getName(),
+                        info.getLatitude(),
+                        info.getLongitude()
+                );
+                propertyResponseDtos.add(dto);
+            }
+
+//        } else if(requestDto.getZoom() >= 8){
+//            List<Long> uniqueDistrictIds = properties.stream()
+//                    .map(Property::getDistrictId)
+//                    .distinct()
+//                    .toList();
+//
+//            List<Tuple> districtStats = propertyRepositoryCustom.findStat(
+//                    uniqueDistrictIds, realEstateTypes, tradeTypes, leasePriceMin,
+//                    leasePriceMax, dealPriceMin, dealPriceMax, "district");
+
         }
 
         return propertyResponseDtos;
+    }
+
+    private boolean containsRealEstateType(String propertyRealEstateType, String[] targetTypes) {
+        for (String type : targetTypes) {
+            if (type.equals(propertyRealEstateType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isWithinPriceRange(Property property, List<String> tradeTypes, Integer leasePriceMin, Integer leasePriceMax, Integer dealPriceMin, Integer dealPriceMax) {
+        String tradeType = property.getTradeType();
+        int price = property.getPrice();
+
+        if ("DEAL".equals(tradeType) && tradeTypes.contains("DEAL")) {
+            return price >= dealPriceMin && price <= dealPriceMax;
+        } else if ("LEASE".equals(tradeType) && tradeTypes.contains("LEASE")) {
+            return price >= leasePriceMin && price <= leasePriceMax;
+        }
+        return false;
     }
 
 
