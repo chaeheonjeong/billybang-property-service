@@ -43,7 +43,7 @@ public class PropertyService {
     @Transactional
     public List<PropertyResponseDto> findProperties(PropertyRequestDto requestDto) {
         String[] realEstateTypes = makeNewTypes(requestDto.getRealEstateType());
-        String[] tradeTypes = requestDto.getTradeType().split(":");
+        List<String> tradeTypes = Arrays.asList(requestDto.getTradeType().split(":"));
         Integer leasePriceMin = requestDto.getLeasePriceMin();
         Integer leasePriceMax = requestDto.getLeasePriceMax();
         Integer dealPriceMin = requestDto.getDealPriceMin();
@@ -53,39 +53,59 @@ public class PropertyService {
         double topLat = requestDto.getTopLat();
         double bottomLat = requestDto.getBottomLat();
 
-        List<Property> properties = propertyRepositoryCustom.findPropertiesByRange(
-                realEstateTypes, tradeTypes, leasePriceMin, leasePriceMax,
-                dealPriceMin, dealPriceMax, leftLon, rightLon, topLat, bottomLat
-        );
 
         List<PropertyResponseDto> propertyResponseDtos = new ArrayList<>();
-        if(requestDto.getZoom() >= 1 && requestDto.getZoom() <= 5){
-            propertyResponseDtos = getProperties(properties);
-
-        } else if(requestDto.getZoom() == 6 || requestDto.getZoom() == 7) {
-            List<Long> uniqueAreaIds = properties.stream()
-                    .map(Property::getAreaId)
-                    .distinct()
+        if (requestDto.getZoom() >= 1 && requestDto.getZoom() <= 5) {
+            List<Property> propertiesByRange = propertyRepository.findPropertiesByRange(topLat, bottomLat, rightLon, leftLon);
+            List<Property> filteredProperties = propertiesByRange.stream()
+                    .filter(property -> containsRealEstateType(property.getRealEstateType(), realEstateTypes))
+                    .filter(property -> isWithinPriceRange(property, tradeTypes, leasePriceMin, leasePriceMax, dealPriceMin, dealPriceMax))
+                    .collect(Collectors.toList());
+            propertyResponseDtos = getProperties(filteredProperties);
+        } else { // gu, dong
+            List<Long> districtIds = districtInfo.entrySet().stream()
+                    .filter(entry -> {
+                        double latitude = entry.getValue().getLatitude();
+                        double longitude = entry.getValue().getLongitude();
+                        return longitude >= leftLon && longitude <= rightLon &&
+                                latitude >= bottomLat && latitude <= topLat;
+                    }).map(Map.Entry::getKey)
                     .toList();
+            List<Property> propertiesByDis = propertyRepository.findByDistrictIds(districtIds);
+            List<Property> filteredProperties = propertiesByDis.stream()
+                    .filter(property -> containsRealEstateType(property.getRealEstateType(), realEstateTypes))
+                    .filter(property -> isWithinPriceRange(property, tradeTypes, leasePriceMin, leasePriceMax, dealPriceMin, dealPriceMax))
+                    .collect(Collectors.toList());
 
-            List<Tuple> areaStats = propertyRepositoryCustom.findStat(
-                    uniqueAreaIds, realEstateTypes, tradeTypes, leasePriceMin,
-                    leasePriceMax, dealPriceMin, dealPriceMax, "area");
-            propertyResponseDtos = getGuDongProperties(areaStats, "area");
-
-        } else if(requestDto.getZoom() >= 8){
-            List<Long> uniqueDistrictIds = properties.stream()
-                    .map(Property::getDistrictId)
-                    .distinct()
-                    .toList();
-
-            List<Tuple> districtStats = propertyRepositoryCustom.findStat(
-                    uniqueDistrictIds, realEstateTypes, tradeTypes, leasePriceMin,
-                    leasePriceMax, dealPriceMin, dealPriceMax, "district");
-            propertyResponseDtos = getGuDongProperties(districtStats, "district");
+            if (requestDto.getZoom() == 6) {
+                propertyResponseDtos = getGuDongProperties(filteredProperties, "area");
+            } else if (requestDto.getZoom() >= 7) {
+                propertyResponseDtos = getGuDongProperties(filteredProperties, "district");
+            }
         }
-
         return propertyResponseDtos;
+    }
+
+    private boolean containsRealEstateType(String propertyRealEstateType, String[] targetTypes) {
+        for (String type : targetTypes) {
+            if (type.equals(propertyRealEstateType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isWithinPriceRange(Property property, List<String> tradeTypes, Integer leasePriceMin, Integer leasePriceMax, Integer dealPriceMin, Integer dealPriceMax) {
+        String tradeType = property.getTradeType();
+        int price = property.getPrice();
+
+        if ("DEAL".equals(tradeType) && tradeTypes.contains("DEAL")) {
+            return price >= dealPriceMin && price <= dealPriceMax;
+        } else if ("LEASE".equals(tradeType) && tradeTypes.contains("LEASE")) {
+            return price >= leasePriceMin && price <= leasePriceMax;
+        }
+        return false;
     }
 
 
@@ -167,7 +187,7 @@ public class PropertyService {
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                String code = values[0].substring(5);
+                String code = values[0];
                 String name = values[3];
                 double latitude = Double.parseDouble(values[5]);
                 double longitude = Double.parseDouble(values[6]);
@@ -177,31 +197,31 @@ public class PropertyService {
             throw new RuntimeException(e);
         }
 
-        districtInfo.put(11110L,new DistrictAreaInfo(37.58482, 126.98606, "종로구"));
-        districtInfo.put(11140L,new DistrictAreaInfo(37.56138, 126.98962, "중구"));
-        districtInfo.put(11170L,new DistrictAreaInfo(37.533429, 126.975777, "용산구"));
-        districtInfo.put(11200L,new DistrictAreaInfo(37.55628, 127.04115, "성동구"));
-        districtInfo.put(11215L,new DistrictAreaInfo(37.53505, 127.08582, "광진구"));
-        districtInfo.put(11230L,new DistrictAreaInfo(37.58176, 127.05130, "동대문구"));
-        districtInfo.put(11260L,new DistrictAreaInfo(37.60656, 127.08724, "중랑구"));
-        districtInfo.put(11290L,new DistrictAreaInfo(37.60107, 127.03605, "성북구"));
-        districtInfo.put(11305L,new DistrictAreaInfo(37.63738, 127.02364, "강북구"));
-        districtInfo.put(11320L,new DistrictAreaInfo(37.66416, 127.03776, "도봉구"));
-        districtInfo.put(11350L,new DistrictAreaInfo(37.64895, 127.06416, "노원구"));
-        districtInfo.put(11380L,new DistrictAreaInfo(37.60446, 126.91720, "은평구"));
-        districtInfo.put(11410L,new DistrictAreaInfo(37.5792250, 126.9368000, "서대문구"));
-        districtInfo.put(11440L,new DistrictAreaInfo(37.55448, 126.93195, "마포구"));
-        districtInfo.put(11470L,new DistrictAreaInfo(37.52772, 126.85191, "양천구"));
-        districtInfo.put(11500L,new DistrictAreaInfo(37.56033, 126.83971, "강서구"));
-        districtInfo.put(11530L,new DistrictAreaInfo(37.49962, 126.86203, "구로구"));
-        districtInfo.put(11545L,new DistrictAreaInfo(37.4570783, 126.8957011, "금천구"));
-        districtInfo.put(11560L,new DistrictAreaInfo(37.51787, 126.90746, "영등포구"));
-        districtInfo.put(11590L,new DistrictAreaInfo(37.49562, 126.94433, "동작구"));
-        districtInfo.put(11620L,new DistrictAreaInfo(37.4781548, 126.9514847, "관악구"));
-        districtInfo.put(11650L,new DistrictAreaInfo(37.49115, 127.00832, "서초구"));
-        districtInfo.put(11680L,new DistrictAreaInfo(37.50520, 127.04872, "강남구"));
-        districtInfo.put(11710L,new DistrictAreaInfo( 37.51335, 127.11706, "송파구"));
-        districtInfo.put(11740L,new DistrictAreaInfo(37.54144, 127.14410, "강동구"));
+        districtInfo.put(1111000000L,new DistrictAreaInfo(37.58482, 126.98606, "종로구"));
+        districtInfo.put(1114000000L,new DistrictAreaInfo(37.56138, 126.98962, "중구"));
+        districtInfo.put(1117000000L,new DistrictAreaInfo(37.533429, 126.975777, "용산구"));
+        districtInfo.put(1120000000L,new DistrictAreaInfo(37.55628, 127.04115, "성동구"));
+        districtInfo.put(1121500000L,new DistrictAreaInfo(37.53505, 127.08582, "광진구"));
+        districtInfo.put(1123000000L,new DistrictAreaInfo(37.58176, 127.05130, "동대문구"));
+        districtInfo.put(1126000000L,new DistrictAreaInfo(37.60656, 127.08724, "중랑구"));
+        districtInfo.put(1129000000L,new DistrictAreaInfo(37.60107, 127.03605, "성북구"));
+        districtInfo.put(1130500000L,new DistrictAreaInfo(37.63738, 127.02364, "강북구"));
+        districtInfo.put(1132000000L,new DistrictAreaInfo(37.66416, 127.03776, "도봉구"));
+        districtInfo.put(1135000000L,new DistrictAreaInfo(37.64895, 127.06416, "노원구"));
+        districtInfo.put(1138000000L,new DistrictAreaInfo(37.60446, 126.91720, "은평구"));
+        districtInfo.put(1141000000L,new DistrictAreaInfo(37.5792250, 126.9368000, "서대문구"));
+        districtInfo.put(1144000000L,new DistrictAreaInfo(37.55448, 126.93195, "마포구"));
+        districtInfo.put(1147000000L,new DistrictAreaInfo(37.52772, 126.85191, "양천구"));
+        districtInfo.put(1150000000L,new DistrictAreaInfo(37.56033, 126.83971, "강서구"));
+        districtInfo.put(1153000000L,new DistrictAreaInfo(37.49962, 126.86203, "구로구"));
+        districtInfo.put(1154500000L,new DistrictAreaInfo(37.4570783, 126.8957011, "금천구"));
+        districtInfo.put(1156000000L,new DistrictAreaInfo(37.51787, 126.90746, "영등포구"));
+        districtInfo.put(1159000000L,new DistrictAreaInfo(37.49562, 126.94433, "동작구"));
+        districtInfo.put(1162000000L,new DistrictAreaInfo(37.4781548, 126.9514847, "관악구"));
+        districtInfo.put(1165000000L,new DistrictAreaInfo(37.49115, 127.00832, "서초구"));
+        districtInfo.put(1168000000L,new DistrictAreaInfo(37.50520, 127.04872, "강남구"));
+        districtInfo.put(1171000000L,new DistrictAreaInfo( 37.51335, 127.11706, "송파구"));
+        districtInfo.put(1174000000L,new DistrictAreaInfo(37.54144, 127.14410, "강동구"));
     }
 
 
@@ -234,12 +254,24 @@ public class PropertyService {
                 .toList();
     }
 
-    public List<PropertyResponseDto> getGuDongProperties(List<Tuple> stats, String type){
-        return stats.stream()
-                .map(stat -> {
-                    Long id = stat.get(0, Long.class);
-                    Long propertyCount = stat.get(1, Long.class);;
-                    Double averagePrice = stat.get(2, Double.class);
+    public List<PropertyResponseDto> getGuDongProperties(List<Property> stats, String type) {
+        Map<Long, List<Property>> groupedById = new HashMap<>();
+
+        if("district".equals(type)) {
+            groupedById = stats.stream().collect(Collectors.groupingBy(Property::getDistrictId));
+        } else if("area".equals(type)){
+            groupedById = stats.stream().collect(Collectors.groupingBy(Property::getAreaId));
+        }
+
+        return groupedById.entrySet().stream()
+                .map(entry -> {
+                    Long id = entry.getKey();
+                    List<Property> properties = entry.getValue();
+
+                    long propertyCount = properties.size();
+                    double averagePrice = properties.stream()
+                            .collect(Collectors.averagingDouble(Property::getPrice));
+
                     DistrictAreaInfo info;
                     if (type.equals("district")) {
                         info = districtInfo.get(id);
@@ -249,8 +281,8 @@ public class PropertyService {
 
                     return new PropertyResponseDto(
                             id,
-                            propertyCount.intValue(),
-                            averagePrice.intValue(),
+                            (int) propertyCount,
+                            (int) averagePrice,
                             null,
                             info.getName(),
                             info.getLatitude(),
