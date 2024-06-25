@@ -8,7 +8,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Table(name = "distircts")
+@Table(name = "districts")
 @ToString
 public class District {
     @Id
