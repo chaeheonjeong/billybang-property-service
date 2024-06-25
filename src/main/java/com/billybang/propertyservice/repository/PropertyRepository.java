@@ -19,5 +19,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long>{
                                          @Param("rightLon") double rightLon,
                                          @Param("leftLon") double leftLon);
 
-    List<Property> findByAreaId(Long areaIds);
+
+    @Query("select p from Property p where p.districtId in :districtIds")
+    List<Property> findByDistrictIds(@Param("districtIds") List<Long> districtIds);
 }
