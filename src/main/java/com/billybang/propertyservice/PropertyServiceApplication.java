@@ -1,25 +1,10 @@
 package com.billybang.propertyservice;
 
-import com.billybang.propertyservice.service.AreaStatisticDataSaverService;
-import com.billybang.propertyservice.service.DistrictStatisticDataSaverService;
-import com.billybang.propertyservice.service.NewsCrawlingService;
-import com.billybang.propertyservice.service.PropertyDataSaverService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 @SpringBootApplication
-@EnableDiscoveryClient
-@EnableFeignClients
 @EnableScheduling
 public class PropertyServiceApplication {
 

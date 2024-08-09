@@ -4,13 +4,17 @@ import com.billybang.propertyservice.api.ApiResult;
 import com.billybang.propertyservice.model.dto.response.UserResponseDto;
 import com.billybang.propertyservice.model.dto.response.ValidateTokenResponseDto;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-public interface UserServiceClient {
+@Service
+public class UserServiceClientImpl implements UserServiceClient {
 
-    @GetMapping("/user-info")
-    ApiResult<UserResponseDto> getUserInfo();
+    @Override
+    public ApiResult<UserResponseDto> getUserInfo() {
+        return null;
+    }
 
-    @GetMapping("/validate-token")
-    ApiResult<ValidateTokenResponseDto> validateToken();
+    @Override
+    public ApiResult<ValidateTokenResponseDto> validateToken() {
+        return null;
+    }
 }

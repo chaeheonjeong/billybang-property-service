@@ -1,13 +1,11 @@
 package com.billybang.propertyservice.service;
 
-import com.billybang.propertyservice.ReverseGeocoding;
 import com.billybang.propertyservice.model.entity.Property;
 import com.billybang.propertyservice.repository.PropertyDataSaverRepository;
 import jakarta.transaction.Transactional;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
