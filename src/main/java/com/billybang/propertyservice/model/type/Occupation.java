@@ -1,7 +1,6 @@
 package com.billybang.propertyservice.model.type;
 
 public enum Occupation {
-
     GENERAL("일반직"),
     PUBLIC("공무원"),
     EDUCATION("교육"),
