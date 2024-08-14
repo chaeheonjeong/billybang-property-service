@@ -33,7 +33,7 @@ public class StarredPropertyController implements StarredPropertyApi {
     public ResponseEntity<ApiResult<?>> deleteStarredProperty(Long propertyId){
         try {
             starredPropertyService.deleteStarredProperty(propertyId);
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(ApiUtils.success(null));
         } catch(Exception e){
             throw new CommonException(BError.FAIL, "delete starred property");
         }

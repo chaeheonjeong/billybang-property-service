@@ -23,15 +23,6 @@ public class PropertyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private PropertyService propertyService;
-
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    @AfterEach
-    void rollback(){
-
-    }
 
     @Test
     @DisplayName("zoom이 5이하일 때 매물찾기")
