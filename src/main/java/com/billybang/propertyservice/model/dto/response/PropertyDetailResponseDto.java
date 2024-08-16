@@ -1,10 +1,7 @@
 package com.billybang.propertyservice.model.dto.response;
 
 import com.billybang.propertyservice.model.entity.Property;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

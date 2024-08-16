@@ -86,7 +86,7 @@ public class PropertyService {
         return propertyResponseDtos;
     }
 
-    private boolean containsRealEstateType(String propertyRealEstateType, String[] targetTypes) {
+    public boolean containsRealEstateType(String propertyRealEstateType, String[] targetTypes) {
         for (String type : targetTypes) {
             if (type.equals(propertyRealEstateType)) {
                 return true;
@@ -225,7 +225,7 @@ public class PropertyService {
     }
 
 
-    private String[] makeNewTypes(String types) {
+    public String[] makeNewTypes(String types) {
         String[] typeList = types.split(":");
         List<String> newList = new ArrayList<>();
 
@@ -240,7 +240,7 @@ public class PropertyService {
             }
         }
 
-        return newList.toArray(new String[0]);
+        return newList.toArray(new String[newList.size()]);
     }
 
     public List<PropertyResponseDto> getProperties(List<Property> properties){

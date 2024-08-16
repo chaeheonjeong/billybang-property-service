@@ -29,7 +29,6 @@ public class StarredPropertyService {
 
     public List<Property> searchStarredProperty(){
         Long userId = getUserId();
-        System.out.println(userId);
         List<StarredProperty> starredProperties = starredPropertyRepository.findByUserId(userId);
         List<Long> propertyIds = starredProperties.stream()
                 .map(StarredProperty::getPropertyId)

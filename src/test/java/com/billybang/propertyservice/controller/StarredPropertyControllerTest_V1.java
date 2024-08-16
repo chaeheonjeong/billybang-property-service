@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class StarredPropertyControllerTest {
+public class StarredPropertyControllerTest_V1 {
 
     @Autowired
     private MockMvc mockMvc;
